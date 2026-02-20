@@ -131,13 +131,41 @@
         .premium-tag { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 4px 12px; border-radius: 8px; font-size: 0.85em; font-weight: 700; box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2); }
         .public-tag { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 4px 12px; border-radius: 8px; font-size: 0.85em; font-weight: 700; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2); }
         
-        #post-detail { display: none; }
-        .back-btn { background: #64748b; box-shadow: 0 4px 6px rgba(100, 116, 139, 0.2); margin-bottom: 25px; }
-        .back-btn:hover { background: #475569; }
+/* ==========================================
+           🛠️ 修復：取消特效對影片與圖片的渲染干擾
+           ========================================== */
         
-        /* 影片容器處理 */
-        #detail-content iframe { width: 100% !important; height: 60vh !important; max-height: 600px !important; border-radius: 12px; background-color: #0f172a; margin: 25px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        
+        /* 1. 關閉文章詳情區塊的毛玻璃與動畫，確保 iframe 正常渲染 */
+        #post-detail { 
+            display: none; 
+            backdrop-filter: none !important; 
+            -webkit-backdrop-filter: none !important;
+            animation: none !important; /* 移除動畫，避免 transform 跑版 */
+            transform: none !important;
+        }
+
+        /* 2. 確保 Google Drive / YouTube 影片能正常顯示，移除深色背景 */
+        #detail-content iframe { 
+            width: 100% !important; 
+            height: 60vh !important; 
+            max-height: 600px !important; 
+            border-radius: 12px; 
+            background-color: transparent !important; /* 恢復透明背景 */
+            margin: 25px 0; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            position: relative;
+            z-index: 2; /* 確保影片層級在最上方 */
+        }
+
+        /* 3. 確保文章內的圖片自適應大小，不會破圖或超出邊界 */
+        #detail-content img {
+            max-width: 100% !important;
+            height: auto !important;
+            border-radius: 8px;
+            margin: 15px 0;
+            position: relative;
+            z-index: 2;
+        }        
         /* 載入動畫 */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
