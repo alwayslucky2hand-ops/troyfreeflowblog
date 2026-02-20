@@ -3,43 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>特洛伊AI賦能基地</title>
+    <title>我的專屬數位基地</title>
     <style>
-        /* ... 保留你原本的所有 CSS 樣式 ... */
-        :root { --primary-color: #3b82f6; --primary-hover: #2563eb; --danger-color: #ef4444; --bg-gradient: linear-gradient(135deg, #f0f4fd 0%, #e0eafc 100%); --glass-bg: rgba(255, 255, 255, 0.85); --glass-border: rgba(255, 255, 255, 0.6); --text-main: #1e293b; --text-muted: #64748b; }
+        /* ==========================================
+           🎨 品牌專屬視覺變數設定
+           ========================================== */
+        :root {
+            --primary-yellow: #FFD700;     /* 主色：暖鵝黃 */
+            --primary-hover: #E6C200;      /* 暖鵝黃 (懸停加深) */
+            --slate-blue: #708090;         /* 輔色：板岩藍 */
+            --accent-green: #619A86;       /* 強調色：大頭貼擷取的溫暖灰綠色 */
+            --danger-color: #e17055;
+            --bg-color: #FFFFFF;           /* 極簡白底，確保 60% 留白 */
+            --text-main: #333333;          /* 內文深灰 */
+            --glass-border: #f1f5f9;
+        }
+
         *, *::before, *::after { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; line-height: 1.7; max-width: 900px; margin: 0 auto; padding: 20px; background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; }
-        .section { background: var(--glass-bg); padding: 30px; margin-bottom: 30px; border-radius: 16px; border: 1px solid var(--glass-border); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); }
-        h1, h2, h3 { color: #0f172a; font-weight: 700; }
-        .login-box input, .comment-box textarea { padding: 12px 16px; margin: 5px 10px 15px 0; border: 1px solid #cbd5e1; border-radius: 8px; width: calc(50% - 15px); font-size: 1rem; }
-        .comment-box textarea { width: 100%; height: 80px; resize: vertical; }
-        button { background: var(--primary-color); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem; }
+
+        /* 字體規範：微軟正黑體，大面積留白 */
+        body { 
+            font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif; 
+            line-height: 1.8; 
+            max-width: 800px; /* 縮小最大寬度，強制兩側留白 */
+            margin: 0 auto; 
+            padding: 40px 20px; 
+            background: var(--bg-color); 
+            color: var(--text-main); 
+            min-height: 100vh;
+        }
+
+        /* 標題強制粗體與板岩藍搭配 */
+        h1, h2, h3 { 
+            font-family: 'Microsoft JhengHei', sans-serif; 
+            font-weight: bold; 
+            color: var(--slate-blue); 
+            letter-spacing: 0.05em;
+        }
+
+        /* 區塊設計：移除陰影，改用極簡細線框，提升呼吸感 */
+        .section { 
+            background: #ffffff; 
+            padding: 40px; 
+            margin-bottom: 40px; 
+            border-radius: 12px; 
+            border: 1px solid var(--glass-border);
+        }
+
+        /* 登入與留言輸入框：扁平化設計 */
+        .login-box input, .comment-box textarea { 
+            padding: 14px 18px; 
+            margin: 5px 10px 15px 0; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 8px; 
+            width: calc(50% - 15px); 
+            font-size: 1rem;
+            font-family: 'Microsoft JhengHei', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .login-box input:focus, .comment-box textarea:focus {
+            outline: none;
+            border-color: var(--primary-yellow);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+        }
+        .comment-box textarea { width: 100%; height: 100px; resize: vertical; }
+
+        /* 按鈕設計：暖鵝黃底色配深色字，營造吉卜力手繪溫暖感 */
+        button { 
+            background: var(--primary-yellow); 
+            color: #2d3436; 
+            border: none; 
+            padding: 12px 28px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
         button:hover { background: var(--primary-hover); }
-        .category-nav { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
-        .cat-btn { background: #f1f5f9; color: var(--text-muted); padding: 8px 16px; border-radius: 20px; border: 1px solid #e2e8f0; font-size: 0.95em; }
-        .cat-btn.active, .cat-btn:hover { background: #334155; color: white; border-color: #334155; }
-        .post-card { background: #fff; border: 1px solid #e2e8f0; padding: 25px; margin-bottom: 20px; border-radius: 12px; }
-        .post-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        .post-title { font-size: 1.4em; margin: 0; }
-        .post-meta { font-size: 0.9em; color: var(--text-muted); margin-bottom: 15px; display: flex; gap: 12px; flex-wrap: wrap; }
-        .meta-cat { background: #e0f2fe; color: #0284c7; padding: 4px 10px; border-radius: 6px; }
-        .post-excerpt { color: #475569; margin-bottom: 20px; }
-        .premium-tag { background: #f59e0b; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.85em; }
-        .public-tag { background: #10b981; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.85em; }
+
+        /* 雙層分類導覽列 */
+        .filter-section {
+            margin-bottom: 35px; 
+            padding: 20px; 
+            border-radius: 12px; 
+            border: 1px solid #f1f5f9;
+        }
+        .filter-title {
+            margin-bottom: 12px; 
+            font-weight: bold; 
+            color: var(--slate-blue); 
+            font-size: 0.9em;
+            letter-spacing: 0.05em;
+        }
+        .category-nav { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .cat-btn { 
+            background: #f8fafc; 
+            color: var(--slate-blue); 
+            padding: 8px 20px; 
+            border-radius: 30px; 
+            border: 1px solid #e2e8f0; 
+            font-size: 0.95em; 
+            font-weight: normal;
+        }
+        .cat-btn.active { 
+            background: var(--slate-blue); 
+            color: #ffffff; 
+            border-color: var(--slate-blue);
+        }
+
+        /* 文章卡片：扁平化、大量留白 */
+        .post-card { 
+            background: #fff; 
+            border: 1px solid #e2e8f0; 
+            padding: 35px; 
+            margin-bottom: 25px; 
+            border-radius: 12px; 
+            transition: transform 0.2s ease;
+        }
+        .post-card:hover { transform: translateY(-2px); }
+        .post-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .post-title { font-size: 1.5em; margin: 0; color: #2d3436; }
+        
+        /* 標籤設計：結合品牌色 */
+        .premium-tag { background: var(--primary-yellow); color: #2d3436; padding: 4px 12px; border-radius: 6px; font-size: 0.85em; font-weight: bold; }
+        .public-tag { background: var(--accent-green); color: white; padding: 4px 12px; border-radius: 6px; font-size: 0.85em; font-weight: bold; }
+        
+        .post-meta { font-size: 0.9em; color: var(--slate-blue); margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .meta-cat { background: #f1f5f9; padding: 4px 12px; border-radius: 6px; }
+        .post-excerpt { color: #636e72; margin-bottom: 25px; }
+
+        /* 留言板區塊 */
         #post-detail { display: none; }
-        .comment-item { background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--primary-color); }
+        .comment-box { margin-top: 50px; border-top: 2px dashed #e2e8f0; padding-top: 30px; }
+        .comment-item { 
+            background: #fafafa; 
+            padding: 16px; 
+            border-radius: 8px; 
+            margin-bottom: 15px; 
+            border-left: 4px solid var(--accent-green); 
+            color: #2d3436;
+        }
+
+        /* 手機版 RWD */
         @media (max-width: 600px) {
-            body { padding: 10px; } .section { padding: 20px 15px; } .login-box input, button { width: 100%; margin: 0 0 10px 0; } .post-title-row { flex-direction: column; }
+            body { padding: 20px 15px; } 
+            .section, .post-card { padding: 25px 20px; } 
+            .login-box input, button { width: 100%; margin: 0 0 10px 0; } 
+            .post-title-row { flex-direction: column; gap: 10px; }
         }
     </style>
 </head>
 <body>
 
-    <h1>🚀 特洛伊AI賦能基地 </h1>
+    <h1>🚀 我的專屬數位基地</h1>
 
     <div class="section login-box" id="login-section">
         <h3 style="margin-top:0;">會員通行證</h3>
-        <p id="login-status" style="color: var(--text-muted); font-size: 0.95em; margin-bottom: 15px;">目前狀態：未登入</p>
+        <p id="login-status" style="color: var(--slate-blue); font-size: 0.95em; margin-bottom: 20px;">目前狀態：未登入</p>
         
         <div id="step-1">
             <input type="email" id="email" placeholder="輸入會員 Email">
@@ -49,42 +170,54 @@
         <div id="step-2" style="display: none; margin-top: 10px;">
             <input type="text" id="otp-code" placeholder="輸入信箱內的 6 位數驗證碼">
             <button onclick="verifyLogin()">登入解鎖</button>
-            <button onclick="cancelLogin()" style="background: var(--text-muted);">取消</button>
+            <button onclick="cancelLogin()" style="background: #e2e8f0; color: #475569;">取消</button>
         </div>
         
-        <div style="margin-top: 10px;">
-            <button onclick="logout()" style="background: var(--danger-color);">登出</button>
+        <div style="margin-top: 15px;">
+            <button onclick="logout()" style="background: var(--danger-color); color: white;">登出</button>
         </div>
     </div>
 
     <div class="section" id="post-list-section">
-        <div class="category-nav" id="category-container"></div>
-        <div id="loading-list" style="text-align: center; color: var(--text-muted); padding: 30px;">資料同步中，請稍候...</div>
+        
+        <div class="filter-section">
+            <div class="filter-title">第一層：閱讀權限</div>
+            <div class="category-nav" id="tier1-container"></div>
+            
+            <div class="filter-title" style="margin-top: 10px;">第二層：主題分類</div>
+            <div class="category-nav" id="tier2-container" style="margin-bottom: 0;"></div>
+        </div>
+
+        <div id="loading-list" style="text-align: center; color: var(--slate-blue); padding: 30px;">資料同步中，請稍候...</div>
         <div id="post-list"></div>
     </div>
 
     <div class="section" id="post-detail">
-        <button class="back-btn" onclick="backToList()">← 返回文章列表</button>
-        <div class="post-meta" id="detail-meta" style="margin-top: 15px;"></div>
-        <h2 id="detail-title" style="margin-top: 5px; font-size: 1.8em;">載入中...</h2>
-        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
-        <div id="detail-content" style="font-size: 1.1em; line-height: 1.8;"></div>
+        <button onclick="backToList()" style="background: #f1f5f9; color: var(--slate-blue);">← 返回文章列表</button>
+        <div class="post-meta" id="detail-meta" style="margin-top: 25px;"></div>
+        <h2 id="detail-title" style="margin-top: 5px; font-size: 2em; color: #2d3436;">載入中...</h2>
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+        <div id="detail-content" style="font-size: 1.1em; line-height: 2;"></div>
         
-        <div class="comment-box" id="comment-section" style="margin-top: 40px; border-top: 2px dashed #cbd5e1; padding-top: 20px; display: none;">
+        <div class="comment-box" id="comment-section" style="display: none;">
             <h3>💬 留言討論</h3>
-            <div id="comments-list" style="margin-bottom: 15px;"></div>
+            <div id="comments-list" style="margin-bottom: 20px;"></div>
             <textarea id="new-comment" placeholder="寫下你的想法或問題..."></textarea>
             <button onclick="submitComment()" id="btn-submit-comment">送出留言</button>
         </div>
     </div>
 
     <script>
-        // ✅ 記得替換成你新部署的 Web App URL！
+        // ⚠️ 請填入你最新部署的 Google Apps Script 網址
         const API_URL = 'https://script.google.com/macros/s/AKfycbzmFyirI_HeYvElt7V_hw8YKCr82ITzDwlPDZHtJFVr54SdmeKGX1hRGMY9oJZgQAyX/exec';
 
         let currentUser = { email: '', verified: false };
         let allPostsData = []; 
         let currentPostId = null;
+        
+        // 雙層篩選狀態
+        let currentTier1 = '全部'; 
+        let currentTier2 = '全部'; 
 
         window.onload = () => fetchPosts();
 
@@ -154,20 +287,45 @@
                 .then(posts => {
                     allPostsData = posts; 
                     document.getElementById('loading-list').style.display = 'none';
-                    renderCategoryButtons(); 
-                    renderPosts('全部');     
+                    renderCategoryFilters(); 
+                    renderPosts();     
                 });
         }
 
-        function renderCategoryButtons() {
-            const container = document.getElementById('category-container');
+        function renderCategoryFilters() {
+            renderTier1();
+            renderTier2();
+        }
+
+        function renderTier1() {
+            const container = document.getElementById('tier1-container');
+            container.innerHTML = '';
+            const options = ['全部', '公開文章', '會員限定'];
+            
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = opt === currentTier1 ? 'cat-btn active' : 'cat-btn';
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    currentTier1 = opt;
+                    currentTier2 = '全部'; 
+                    renderCategoryFilters(); 
+                    renderPosts(); 
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function renderTier2() {
+            const container = document.getElementById('tier2-container');
             container.innerHTML = '';
             
-            // 加入固定的三種狀態
-            let categories = ['全部', '公開文章', '會員限定'];
-            
-            // 自動收集其他類別
-            allPostsData.forEach(post => {
+            let validPosts = allPostsData;
+            if (currentTier1 === '公開文章') validPosts = allPostsData.filter(p => !p.isPremium);
+            if (currentTier1 === '會員限定') validPosts = allPostsData.filter(p => p.isPremium);
+
+            let categories = ['全部'];
+            validPosts.forEach(post => {
                 if (post.category && !categories.includes(post.category)) {
                     categories.push(post.category);
                 }
@@ -175,32 +333,30 @@
 
             categories.forEach(cat => {
                 const btn = document.createElement('button');
-                btn.className = cat === '全部' ? 'cat-btn active' : 'cat-btn';
+                btn.className = cat === currentTier2 ? 'cat-btn active' : 'cat-btn';
                 btn.innerText = cat;
-                btn.onclick = (e) => {
-                    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active'); 
-                    renderPosts(cat); 
+                btn.onclick = () => {
+                    currentTier2 = cat;
+                    renderTier2(); 
+                    renderPosts(); 
                 };
                 container.appendChild(btn);
             });
         }
 
-        function renderPosts(filterCategory) {
+        function renderPosts() {
             const listContainer = document.getElementById('post-list');
             listContainer.innerHTML = ''; 
 
             let filteredPosts = allPostsData;
-            if (filterCategory === '公開文章') {
-                filteredPosts = allPostsData.filter(post => !post.isPremium);
-            } else if (filterCategory === '會員限定') {
-                filteredPosts = allPostsData.filter(post => post.isPremium);
-            } else if (filterCategory !== '全部') {
-                filteredPosts = allPostsData.filter(post => post.category === filterCategory);
-            }
+
+            if (currentTier1 === '公開文章') filteredPosts = filteredPosts.filter(post => !post.isPremium);
+            else if (currentTier1 === '會員限定') filteredPosts = filteredPosts.filter(post => post.isPremium);
+
+            if (currentTier2 !== '全部') filteredPosts = filteredPosts.filter(post => post.category === currentTier2);
 
             if (filteredPosts.length === 0) {
-                listContainer.innerHTML = '<p style="color: #7f8c8d;">這個分類目前還沒有文章喔！</p>';
+                listContainer.innerHTML = '<p style="color: var(--slate-blue); text-align: center; padding: 20px;">這個條件下目前還沒有文章喔！</p>';
                 return;
             }
 
@@ -221,7 +377,7 @@
                             <span>🗓️ ${displayDate}</span>
                         </div>
                         <div class="post-excerpt">${excerptText}</div>
-                        <button onclick="readPost('${post.id}')" style="width: 100%; margin-top: 10px;">閱讀全文</button>
+                        <button onclick="readPost('${post.id}')" style="width: 100%;">閱讀全文</button>
                     </div>
                 `;
                 listContainer.innerHTML += postHTML;
@@ -233,7 +389,7 @@
             currentPostId = id;
             document.getElementById('post-list-section').style.display = 'none';
             document.getElementById('post-detail').style.display = 'block';
-            document.getElementById('comment-section').style.display = 'none'; // 先隱藏留言板
+            document.getElementById('comment-section').style.display = 'none'; 
             document.getElementById('detail-title').innerText = '載入中...';
             document.getElementById('detail-content').innerText = '正在向系統驗證權限與提取內容...';
 
@@ -250,14 +406,13 @@
 
                     if (data.error) {
                         document.getElementById('detail-content').innerHTML = `
-                            <div style="background: #fef3c7; padding: 25px; border-radius: 12px; text-align: center;">
-                                <h3 style="color: #d97706; margin-top:0;">🔒 需要通行權限</h3>
-                                <p style="color: #b45309; font-weight:bold;">${data.error}</p>
+                            <div style="background: #fffbe6; padding: 30px; border-radius: 12px; text-align: center; border: 1px solid var(--primary-yellow);">
+                                <h3 style="color: #d4a017; margin-top:0;">🔒 需要通行權限</h3>
+                                <p style="color: #8c6b0a; font-weight:bold;">${data.error}</p>
                             </div>
                         `;
                     } else {
                         document.getElementById('detail-content').innerHTML = data.content;
-                        // 顯示留言板與歷史留言
                         document.getElementById('comment-section').style.display = 'block';
                         renderComments(data.comments);
                     }
@@ -268,7 +423,7 @@
             const list = document.getElementById('comments-list');
             list.innerHTML = '';
             if (!comments || comments.length === 0) {
-                list.innerHTML = '<p style="color: #94a3b8; font-size:0.9em;">目前還沒有人留言，來搶頭香吧！</p>';
+                list.innerHTML = '<p style="color: var(--slate-blue); font-size:0.9em;">目前還沒有人留言，來搶頭香吧！</p>';
                 return;
             }
             comments.forEach(c => {
@@ -295,7 +450,7 @@
                 if (data.success) {
                     alert('留言成功！');
                     document.getElementById('new-comment').value = '';
-                    readPost(currentPostId); // 重新載入文章以更新留言列表
+                    readPost(currentPostId); 
                 } else {
                     alert('留言失敗：' + data.error);
                 }
