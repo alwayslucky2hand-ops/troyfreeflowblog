@@ -3,62 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>我的專屬部落格</title>
+    <title>我的專屬數位基地</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; }
-        h1, h2 { color: #333; }
-        .section { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .post-item { border-bottom: 1px solid #eee; padding: 15px 0; display: flex; justify-content: space-between; align-items: center; }
-        .post-item:last-child { border-bottom: none; }
-        .premium-tag { background: #ffc107; color: #333; padding: 3px 8px; border-radius: 4px; font-size: 0.8em; margin-left: 10px; }
-        button { background: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        input { padding: 8px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px; }
-        #post-detail { display: none; }
-        .back-btn { background: #6c757d; margin-bottom: 15px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f6f8; color: #333; }
+        h1, h2, h3 { color: #2c3e50; }
+        .section { background: #fff; padding: 25px; margin-bottom: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         
-        /* 讓 iframe 成為萬用彈性容器，適應所有影片比例且不變形 */
-        #detail-content iframe {
-            width: 100% !important;
-            height: 60vh !important; 
-            max-height: 600px !important; 
-            border-radius: 8px;
-            background-color: #000; 
-        }
+        /* 登入區塊設計 */
+        .login-box input { padding: 10px; margin: 5px 10px 10px 0; border: 1px solid #ddd; border-radius: 6px; width: calc(50% - 25px); min-width: 200px; }
+        button { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.3s; }
+        button:hover { background: #2980b9; }
+        
+        /* 分類導覽列 */
+        .category-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .cat-btn { background: #e0e6ed; color: #475569; padding: 6px 15px; border-radius: 20px; border: none; cursor: pointer; font-size: 0.9em; }
+        .cat-btn.active, .cat-btn:hover { background: #2c3e50; color: white; }
+
+        /* 文章卡片設計 */
+        .post-card { border: 1px solid #eef2f5; padding: 20px; margin-bottom: 15px; border-radius: 10px; transition: transform 0.2s; background: #fafbfc; }
+        .post-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
+        .post-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+        .post-title { font-size: 1.3em; font-weight: bold; color: #2c3e50; margin: 0; }
+        
+        /* 中介資訊 (作者、日期、分類) */
+        .post-meta { font-size: 0.85em; color: #7f8c8d; margin-bottom: 12px; display: flex; gap: 15px; align-items: center; }
+        .meta-cat { background: #e8f4fd; color: #3498db; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+        
+        .post-excerpt { font-size: 0.95em; color: #555; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .premium-tag { background: #f39c12; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-weight: bold; }
+        .public-tag { background: #27ae60; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-weight: bold; }
+        
+        #post-detail { display: none; }
+        .back-btn { background: #95a5a6; margin-bottom: 20px; }
+        
+        /* 影片容器處理 */
+        #detail-content iframe { width: 100% !important; height: 60vh !important; max-height: 600px !important; border-radius: 8px; background-color: #000; margin: 20px 0; }
     </style>
 </head>
 <body>
 
-    <h1>📝 我的專屬部落格</h1>
+    <h1>🚀 我的專屬數位基地</h1>
 
-    <div class="section" id="login-section">
-        <h3>會員登入</h3>
-        <p id="login-status">目前狀態：未登入</p>
-        <input type="email" id="email" placeholder="輸入 Email (例: test@example.com)">
-        <input type="password" id="password" placeholder="輸入密碼 (例: 123456)">
-        <button onclick="login()">設定登入資訊</button>
-        <button onclick="logout()" style="background: #dc3545;">登出</button>
+    <div class="section login-box" id="login-section">
+        <h3>會員通行證</h3>
+        <p id="login-status" style="color: #7f8c8d; font-size: 0.9em;">目前狀態：未登入</p>
+        <div>
+            <input type="email" id="email" placeholder="輸入 Email">
+            <input type="password" id="password" placeholder="輸入密碼">
+        </div>
+        <div style="margin-top: 10px;">
+            <button onclick="login()">登入解鎖</button>
+            <button onclick="logout()" style="background: #e74c3c;">登出</button>
+        </div>
     </div>
 
     <div class="section" id="post-list-section">
-        <h2>文章列表</h2>
-        <div id="loading-list">正在載入文章...</div>
+        <div class="category-nav" id="category-container"></div>
+        
+        <div id="loading-list" style="text-align: center; color: #7f8c8d; padding: 20px;">資料同步中，請稍候...</div>
         <div id="post-list"></div>
     </div>
 
     <div class="section" id="post-detail">
-        <button class="back-btn" onclick="backToList()">← 返回列表</button>
-        <h2 id="detail-title">文章標題</h2>
-        <div id="detail-content">文章內容...</div>
+        <button class="back-btn" onclick="backToList()">← 返回文章列表</button>
+        <div class="post-meta" id="detail-meta" style="margin-top: 10px;"></div>
+        <h2 id="detail-title" style="margin-top: 5px;">文章標題</h2>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <div id="detail-content" style="font-size: 1.1em; line-height: 1.8;">文章內容...</div>
     </div>
 
     <script>
         // ==========================================
-        // ⚠️ 請在這裡貼上你剛才部署 GAS 產生的網址！
+        // ⚠️ 記得替換成你的 GAS 網頁應用程式網址！
         // ==========================================
-        const API_URL = 'https://script.google.com/macros/s/AKfycbxBUSx54pLnjGvIL2XrUA4GCDulbzNh5A3OF0MbFDagWlMVeW1FapRwXks1sT03Atq6/exec'; 
+        const API_URL = 'https://script.google.com/macros/s/AKfycbx6icvtdAxSLvkYB_xF9JNGW0S8dg-Eqmv58mKPkQvtRV5HoWflVrySQbjol4PHBco/exec; 
 
         let currentUser = { email: '', password: '' };
+        let allPostsData = []; // 用來將所有文章暫存在前端，方便做分類切換
 
         window.onload = () => {
             fetchPosts();
@@ -69,8 +91,8 @@
             const passInput = document.getElementById('password').value;
             if (emailInput && passInput) {
                 currentUser = { email: emailInput, password: passInput };
-                document.getElementById('login-status').innerText = `目前狀態：已登入 (${emailInput})`;
-                alert('登入資訊已記錄！請點擊文章測試解鎖功能。');
+                document.getElementById('login-status').innerText = `✅ 目前狀態：已登入 (${emailInput})`;
+                alert('登入資訊已記錄！現在可以點擊會員文章測試解鎖了。');
             } else {
                 alert('請輸入帳號和密碼');
             }
@@ -84,53 +106,134 @@
             alert('已登出！');
         }
 
-        // 修改點 1：使用 fetch API 呼叫後端取得文章列表
+        // 取得所有文章並初始化系統
         function fetchPosts() {
             fetch(`${API_URL}?action=getPostList`)
                 .then(response => response.json())
                 .then(posts => {
-                    const listContainer = document.getElementById('post-list');
-                    listContainer.innerHTML = ''; 
+                    allPostsData = posts; // 將資料暫存
                     document.getElementById('loading-list').style.display = 'none';
-
-                    posts.forEach(post => {
-                        const tag = post.isPremium ? '<span class="premium-tag">🔒 會員限定</span>' : '<span class="premium-tag" style="background:#28a745; color:white;">📖 公開</span>';
-                        const postHTML = `
-                            <div class="post-item">
-                                <div><strong>${post.title}</strong> ${tag}</div>
-                                <button onclick="readPost('${post.id}')">閱讀文章</button>
-                            </div>
-                        `;
-                        listContainer.innerHTML += postHTML;
-                    });
+                    
+                    renderCategoryButtons(); // 生成分類按鈕
+                    renderPosts('全部');     // 預設顯示全部文章
                 })
                 .catch(error => {
-                    document.getElementById('loading-list').innerText = '載入失敗，請檢查 API 網址是否正確：' + error;
+                    document.getElementById('loading-list').innerText = '載入失敗，請檢查 API 網址是否正確。';
                 });
         }
 
-        // 修改點 2：使用 fetch API 呼叫後端取得單篇文章內容
+        // 動態生成分類按鈕
+        function renderCategoryButtons() {
+            const container = document.getElementById('category-container');
+            container.innerHTML = '';
+            
+            // 提取所有不重複的分類
+            const categories = ['全部'];
+            allPostsData.forEach(post => {
+                if (post.category && !categories.includes(post.category)) {
+                    categories.push(post.category);
+                }
+            });
+
+            // 建立按鈕
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = cat === '全部' ? 'cat-btn active' : 'cat-btn';
+                btn.innerText = cat;
+                btn.onclick = (e) => {
+                    // 移除所有按鈕的 active 樣式
+                    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active'); // 點擊的按鈕反白
+                    renderPosts(cat); // 依照分類重新渲染列表
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        // 渲染文章列表 (支援分類過濾)
+        function renderPosts(filterCategory) {
+            const listContainer = document.getElementById('post-list');
+            listContainer.innerHTML = ''; 
+
+            const filteredPosts = filterCategory === '全部' 
+                ? allPostsData 
+                : allPostsData.filter(post => post.category === filterCategory);
+
+            if (filteredPosts.length === 0) {
+                listContainer.innerHTML = '<p style="color: #7f8c8d;">這個分類目前還沒有文章喔！</p>';
+                return;
+            }
+
+            filteredPosts.forEach(post => {
+                const tag = post.isPremium ? '<span class="premium-tag">🔒 會員限定</span>' : '<span class="public-tag">📖 公開文章</span>';
+                
+                // 格式化日期顯示
+                let displayDate = "未知日期";
+                if (post.publishDate) {
+                    const d = new Date(post.publishDate);
+                    if (!isNaN(d.getTime())) {
+                        displayDate = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
+                    }
+                }
+
+                // 處理簡述內容
+                const excerptText = post.excerpt ? post.excerpt : "點擊閱讀完整內容...";
+
+                const postHTML = `
+                    <div class="post-card">
+                        <div class="post-title-row">
+                            <h3 class="post-title">${post.title}</h3>
+                            ${tag}
+                        </div>
+                        <div class="post-meta">
+                            <span class="meta-cat">${post.category || '未分類'}</span>
+                            <span>✍️ ${post.author || '匿名'}</span>
+                            <span>🗓️ ${displayDate}</span>
+                        </div>
+                        <div class="post-excerpt">${excerptText}</div>
+                        <button onclick="readPost('${post.id}')" style="background: #2c3e50;">閱讀全文</button>
+                    </div>
+                `;
+                listContainer.innerHTML += postHTML;
+            });
+        }
+
+        // 讀取單篇文章內容
         function readPost(id) {
             document.getElementById('post-list-section').style.display = 'none';
             document.getElementById('post-detail').style.display = 'block';
             document.getElementById('detail-title').innerText = '載入中...';
-            document.getElementById('detail-content').innerText = '正在向伺服器驗證權限與內容...';
+            document.getElementById('detail-meta').innerHTML = '';
+            document.getElementById('detail-content').innerText = '正在向系統驗證權限與提取內容...';
 
-            // 將帳號密碼與請求一起送到後端驗證
             const url = `${API_URL}?action=getSinglePost&id=${id}&email=${encodeURIComponent(currentUser.email)}&password=${encodeURIComponent(currentUser.password)}`;
 
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('detail-title').innerText = data.title;
+                    
+                    // 渲染文章頁面的作者與時間資訊
+                    document.getElementById('detail-meta').innerHTML = `
+                        <span class="meta-cat">${data.category || '未分類'}</span>
+                        <span>✍️ ${data.author || '匿名'}</span>
+                        <span>🗓️ ${data.publishDate || '未知日期'}</span>
+                    `;
+
                     if (data.error) {
-                        document.getElementById('detail-content').innerHTML = `<p style="color:red; font-weight:bold;">❌ ${data.error}</p>`;
+                        document.getElementById('detail-content').innerHTML = `
+                            <div style="background: #ffeaa7; padding: 20px; border-radius: 8px; text-align: center;">
+                                <h3 style="color: #d35400;">🔒 需要通行權限</h3>
+                                <p style="color: #c0392b; font-weight:bold;">${data.error}</p>
+                                <p>這是一篇會員專屬的高價值內容。請返回首頁輸入正確的帳號密碼來解鎖。</p>
+                            </div>
+                        `;
                     } else {
                         document.getElementById('detail-content').innerHTML = data.content;
                     }
                 })
                 .catch(error => {
-                    document.getElementById('detail-content').innerHTML = `<p style="color:red; font-weight:bold;">❌ 連線發生錯誤：${error}</p>`;
+                    document.getElementById('detail-content').innerHTML = `<p style="color:red; font-weight:bold;">❌ 系統連線發生錯誤：${error}</p>`;
                 });
         }
 
