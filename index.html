@@ -2,23 +2,24 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>我的專屬數位基地</title>
     <style>
-        /* 2026 趨勢：CSS 變數、設計系統思維 */
+        /* 基礎變數與設定 */
         :root {
             --primary-color: #3b82f6;
             --primary-hover: #2563eb;
             --danger-color: #ef4444;
             --danger-hover: #dc2626;
             --bg-gradient: linear-gradient(135deg, #f0f4fd 0%, #e0eafc 100%);
-            --glass-bg: rgba(255, 255, 255, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
+            --glass-bg: rgba(255, 255, 255, 0.85); /* 稍微調高不透明度，提升手機閱讀清晰度 */
+            --glass-border: rgba(255, 255, 255, 0.6);
             --text-main: #1e293b;
             --text-muted: #64748b;
-            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+
+        /* 確保所有元素寬度計算包含 padding，避免手機版超出螢幕 */
+        *, *::before, *::after { box-sizing: border-box; }
 
         body { 
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
@@ -33,141 +34,130 @@
 
         h1, h2, h3 { color: #0f172a; font-weight: 700; letter-spacing: -0.02em; }
         
-        /* 2026 趨勢：液態毛玻璃 (Liquid Glass) 區塊 */
+        /* 區塊設計 - 移除動畫與過度毛玻璃特效 */
         .section { 
             background: var(--glass-bg); 
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             padding: 30px; 
             margin-bottom: 30px; 
-            border-radius: 20px; 
+            border-radius: 16px; 
             border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow); 
-            animation: fadeIn 0.5s ease-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); 
         }
 
         /* 登入區塊設計 */
         .login-box input { 
-            padding: 12px 16px; /* WCAG 2.2 增加觸控範圍 */
+            padding: 12px 16px; 
             margin: 5px 10px 15px 0; 
             border: 1px solid #cbd5e1; 
-            border-radius: 10px; 
-            width: calc(50% - 25px); 
-            min-width: 220px; 
+            border-radius: 8px; 
+            width: calc(50% - 15px); 
             font-size: 1rem;
-            background: rgba(255,255,255,0.8);
-            transition: var(--transition-smooth);
+            background: #fff;
         }
         
         .login-box input:focus-visible {
             outline: 2px solid var(--primary-color);
             border-color: transparent;
-            background: #fff;
         }
 
         button { 
             background: var(--primary-color); 
             color: white; 
             border: none; 
-            padding: 12px 24px; /* WCAG 2.2 至少 44px 高度 */
-            border-radius: 10px; 
+            padding: 12px 24px; 
+            border-radius: 8px; 
             cursor: pointer; 
             font-weight: 600; 
             font-size: 1rem;
-            transition: var(--transition-smooth); 
-            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
         }
         
-        button:hover { 
-            background: var(--primary-hover); 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
-        }
-        
+        button:hover { background: var(--primary-hover); }
         button:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
 
         /* 分類導覽列 */
-        .category-nav { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; }
+        .category-nav { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
         .cat-btn { 
             background: #f1f5f9; 
             color: var(--text-muted); 
-            padding: 8px 18px; 
-            border-radius: 30px; 
+            padding: 8px 16px; 
+            border-radius: 20px; 
             border: 1px solid #e2e8f0;
-            box-shadow: none;
             font-size: 0.95em; 
         }
         .cat-btn.active, .cat-btn:hover { 
             background: #334155; 
             color: white; 
             border-color: #334155;
-            transform: translateY(-1px);
         }
 
-        /* 文章卡片設計 - 微互動 (Micro-interactions) */
+        /* 文章卡片設計 - 靜態無特效 */
         .post-card { 
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid #f1f5f9; 
+            background: #fff;
+            border: 1px solid #e2e8f0; 
             padding: 25px; 
             margin-bottom: 20px; 
-            border-radius: 16px; 
-            transition: var(--transition-smooth); 
-        }
-        .post-card:hover { 
-            transform: translateY(-4px); 
-            box-shadow: 0 12px 24px rgba(0,0,0,0.06); 
-            border-color: #e2e8f0;
+            border-radius: 12px; 
         }
         .post-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
         .post-title { font-size: 1.4em; font-weight: 700; color: #0f172a; margin: 0; line-height: 1.3; }
         
         /* 中介資訊 (作者、日期、分類) */
-        .post-meta { font-size: 0.9em; color: var(--text-muted); margin-bottom: 15px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        .post-meta { font-size: 0.9em; color: var(--text-muted); margin-bottom: 15px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
         .meta-cat { background: #e0f2fe; color: #0284c7; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 0.85em; }
         
         .post-excerpt { font-size: 1em; color: #475569; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         
-        /* 標籤視覺優化 */
-        .premium-tag { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 4px 12px; border-radius: 8px; font-size: 0.85em; font-weight: 700; box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2); }
-        .public-tag { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 4px 12px; border-radius: 8px; font-size: 0.85em; font-weight: 700; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2); }
+        /* 標籤設計 */
+        .premium-tag { background: #f59e0b; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.85em; font-weight: 700; }
+        .public-tag { background: #10b981; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.85em; font-weight: 700; }
         
-/* ==========================================
-           🛠️ 修復：取消特效對影片與圖片的渲染干擾
-           ========================================== */
-        
-        /* 1. 關閉文章詳情區塊的毛玻璃與動畫，確保 iframe 正常渲染 */
-        #post-detail { 
-            display: none; 
-            backdrop-filter: none !important; 
-            -webkit-backdrop-filter: none !important;
-            animation: none !important; /* 移除動畫，避免 transform 跑版 */
-            transform: none !important;
-        }
-
-        /* 2. 確保 Google Drive / YouTube 影片能正常顯示，移除深色背景 */
+        /* 文章詳情區塊 */
+        #post-detail { display: none; }
         #detail-content iframe { 
             width: 100% !important; 
-            height: 60vh !important; 
-            max-height: 600px !important; 
-            border-radius: 12px; 
-            background-color: transparent !important; /* 恢復透明背景 */
-            margin: 25px 0; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-            position: relative;
-            z-index: 2; /* 確保影片層級在最上方 */
+            height: 50vh !important; 
+            border-radius: 8px; 
+            margin: 20px 0; 
         }
-
-        /* 3. 確保文章內的圖片自適應大小，不會破圖或超出邊界 */
         #detail-content img {
             max-width: 100% !important;
             height: auto !important;
             border-radius: 8px;
             margin: 15px 0;
-            position: relative;
-            z-index: 2;
-        }        
-        /* 載入動畫 */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        }
+
+        /* ==========================================
+           📱 手機版專屬 RWD 設計 (螢幕寬度小於 600px 時觸發)
+           ========================================== */
+        @media (max-width: 600px) {
+            body { padding: 10px; } /* 減少兩側留白 */
+            
+            .section { 
+                padding: 20px 15px; /* 內部空間微調 */
+                margin-bottom: 15px;
+            }
+
+            /* 輸入框與按鈕改為全寬度，方便手指點擊 */
+            .login-box input { 
+                width: 100%; 
+                margin: 0 0 10px 0; 
+            }
+            .login-box button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            /* 標題與標籤改為垂直排列，避免擠壓 */
+            .post-title-row { 
+                flex-direction: column; 
+                gap: 10px; 
+            }
+            .post-title { font-size: 1.25em; }
+            
+            .post-card { padding: 15px; } /* 縮小卡片內距 */
+            
+            .back-btn { width: 100%; } /* 返回按鈕滿版 */
+        }
     </style>
 </head>
 <body>
@@ -183,7 +173,7 @@
         </div>
         <div style="margin-top: 10px;">
             <button onclick="login()">登入解鎖</button>
-            <button onclick="logout()" style="background: var(--danger-color); box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);">登出</button>
+            <button onclick="logout()" style="background: var(--danger-color);">登出</button>
         </div>
     </div>
 
@@ -191,23 +181,21 @@
         <div class="category-nav" id="category-container"></div>
         
         <div id="loading-list" style="text-align: center; color: var(--text-muted); padding: 30px; font-weight: 500;">
-            <span style="display:inline-block; animation: fadeIn 1s infinite alternate;">資料同步中，請稍候...</span>
+            資料同步中，請稍候...
         </div>
         <div id="post-list"></div>
     </div>
 
     <div class="section" id="post-detail">
         <button class="back-btn" onclick="backToList()">← 返回文章列表</button>
-        <div class="post-meta" id="detail-meta" style="margin-top: 10px;"></div>
-        <h2 id="detail-title" style="margin-top: 5px; font-size: 2em;">文章標題</h2>
-        <hr style="border: 0; border-top: 2px solid #e2e8f0; margin: 25px 0;">
-        <div id="detail-content" style="font-size: 1.15em; line-height: 1.8; color: #334155;">文章內容...</div>
+        <div class="post-meta" id="detail-meta" style="margin-top: 15px;"></div>
+        <h2 id="detail-title" style="margin-top: 5px; font-size: 1.8em; line-height: 1.3;">文章標題</h2>
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+        <div id="detail-content" style="font-size: 1.1em; line-height: 1.8; color: #334155;">文章內容...</div>
     </div>
 
     <script>
-        // ==========================================
         // ✅ 完美保留原始 API URL 與所有 JS 運作邏輯
-        // ==========================================
         const API_URL = 'https://script.google.com/macros/s/AKfycbx6icvtdAxSLvkYB_xF9JNGW0S8dg-Eqmv58mKPkQvtRV5HoWflVrySQbjol4PHBco/exec';
 
         let currentUser = { email: '', password: '' };
@@ -306,7 +294,7 @@
                     <div class="post-card">
                         <div class="post-title-row">
                             <h3 class="post-title">${post.title}</h3>
-                            ${tag}
+                            <div>${tag}</div>
                         </div>
                         <div class="post-meta">
                             <span class="meta-cat">${post.category || '未分類'}</span>
@@ -314,7 +302,7 @@
                             <span>🗓️ ${displayDate}</span>
                         </div>
                         <div class="post-excerpt">${excerptText}</div>
-                        <button onclick="readPost('${post.id}')">閱讀全文</button>
+                        <button onclick="readPost('${post.id}')" style="width: 100%; margin-top: 10px;">閱讀全文</button>
                     </div>
                 `;
                 listContainer.innerHTML += postHTML;
@@ -361,6 +349,7 @@
         function backToList() {
             document.getElementById('post-detail').style.display = 'none';
             document.getElementById('post-list-section').style.display = 'block';
+            window.scrollTo(0, 0); // 返回列表時回到頂部，對手機版體驗更好
         }
     </script>
 </body>
