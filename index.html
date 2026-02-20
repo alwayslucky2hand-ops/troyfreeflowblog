@@ -16,6 +16,7 @@
             --danger-color: #e17055;
             --bg-color: #FFFFFF;           
             --text-main: #333333;          
+            --text-muted: #64748b;
             --glass-border: #cbd5e1;       /* 加深框線，提升立體感 */
         }
 
@@ -77,6 +78,26 @@
         }
         button:hover { background: var(--primary-hover); }
 
+        /* 🆕 搜尋框樣式 */
+        .search-box { 
+            width: 100%; 
+            padding: 16px 20px; 
+            border: 1px solid var(--glass-border); 
+            border-radius: 12px; 
+            font-size: 1rem; 
+            color: var(--text-main); 
+            background: #f8fafc; 
+            transition: all 0.3s ease; 
+            font-family: 'Microsoft JhengHei', sans-serif;
+        }
+        .search-box:focus { 
+            outline: none; 
+            border-color: var(--primary-yellow); 
+            background: var(--bg-color);
+            box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); 
+        }
+        .search-box::placeholder { color: var(--text-muted); font-weight: normal; }
+
         .filter-section {
             margin-bottom: 35px; 
             padding: 20px; 
@@ -136,7 +157,6 @@
             color: #2d3436;
         }
 
-        /* 🆕 分頁按鈕樣式 */
         .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 30px; flex-wrap: wrap; }
         .page-btn { 
             background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border); 
@@ -150,6 +170,7 @@
             .section, .post-card { padding: 25px 20px; } 
             .login-box input, button, .page-btn { width: 100%; margin: 0 0 10px 0; } 
             .post-title-row { flex-direction: column; gap: 10px; }
+            #search-section { padding: 25px 20px !important; }
         }
     </style>
 </head>
@@ -178,6 +199,10 @@
         </div>
     </div>
 
+    <div class="section" id="search-section" style="padding: 25px 40px;">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 輸入關鍵字搜尋文章標題、內容、分類或作者..." oninput="handleSearch()">
+    </div>
+
     <div class="section" id="post-list-section">
         <div class="filter-section">
             <div class="filter-title">閱讀權限</div>
@@ -189,7 +214,8 @@
 
         <div id="loading-list" style="text-align: center; color: var(--slate-blue); padding: 30px;">資料同步中，請稍候...</div>
         <div id="post-list"></div>
-        <div id="pagination-container"></div> </div>
+        <div id="pagination-container"></div> 
+    </div>
 
     <div class="section" id="post-detail">
         <button onclick="backToList()" style="background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border);">← 返回文章列表</button>
@@ -207,7 +233,6 @@
     </div>
 
     <script>
-        // ⚠️ 請填入你最新部署的 Google Apps Script 網址
         const API_URL = 'https://script.google.com/macros/s/AKfycby8P65RkUo8msLizvYM8cLTW_KZTrbz8q2narlec-3DT72hO363eKPqJEiYbWAfjd7r/exec';
 
         let currentUser = { email: '', verified: false };
@@ -216,17 +241,24 @@
         
         let currentTier1 = '全部'; 
         let currentTier2 = '全部'; 
+        let currentSearchQuery = ''; // 🆕 新增：儲存當前的搜尋關鍵字
 
-        // 🆕 分頁變數
         let currentPage = 1;
         const postsPerPage = 10;
 
         window.onload = () => fetchPosts();
 
+        // 🆕 新增：處理搜尋框輸入事件
+        function handleSearch() {
+            currentSearchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+            currentPage = 1; // 重新搜尋時自動回到第一頁
+            renderPosts();
+        }
+
         // --- 登入與驗證邏輯 ---
         function requestOTP() {
             const emailInput = document.getElementById('email').value;
-            if (!emailInput) return alert('請先輸入 Email'); // 錯誤依然保留提示
+            if (!emailInput) return alert('請先輸入 Email'); 
             
             document.getElementById('btn-otp').innerText = "寄送中...";
             document.getElementById('otp-msg').style.display = 'none';
@@ -238,9 +270,8 @@
             .then(res => res.json())
             .then(data => {
                 document.getElementById('btn-otp').innerText = "寄送驗證碼";
-                if (data.error) return alert(data.error); // 錯誤提示
+                if (data.error) return alert(data.error); 
                 
-                // 無縫切換，無彈窗
                 document.getElementById('step-1').style.display = 'none';
                 document.getElementById('step-2').style.display = 'block';
                 document.getElementById('otp-msg').style.display = 'inline';
@@ -253,7 +284,7 @@
         function verifyLogin() {
             const emailInput = document.getElementById('email').value;
             const otpInput = document.getElementById('otp-code').value;
-            if (!otpInput) return alert('請輸入驗證碼'); // 錯誤提示
+            if (!otpInput) return alert('請輸入驗證碼'); 
 
             fetch(API_URL, {
                 method: 'POST',
@@ -261,9 +292,8 @@
             })
             .then(res => res.json())
             .then(data => {
-                if (data.error) return alert(data.error); // 錯誤提示
+                if (data.error) return alert(data.error); 
                 
-                // 無縫登入，無彈窗
                 currentUser = { email: emailInput, verified: true };
                 document.getElementById('login-status').innerText = `✅ 目前狀態：已登入 (${emailInput})`;
                 document.getElementById('step-1').style.display = 'block';
@@ -278,7 +308,6 @@
         }
 
         function logout() {
-            // 無縫登出，無彈窗
             currentUser = { email: '', verified: false };
             document.getElementById('email').value = '';
             document.getElementById('login-status').innerText = '目前狀態：未登入';
@@ -313,7 +342,7 @@
                 btn.onclick = () => {
                     currentTier1 = opt;
                     currentTier2 = '全部'; 
-                    currentPage = 1; // 🆕 切換分類時回到第一頁
+                    currentPage = 1; 
                     renderCategoryFilters(); 
                     renderPosts(); 
                 };
@@ -342,7 +371,7 @@
                 btn.innerText = cat;
                 btn.onclick = () => {
                     currentTier2 = cat;
-                    currentPage = 1; // 🆕 切換分類時回到第一頁
+                    currentPage = 1; 
                     renderTier2(); 
                     renderPosts(); 
                 };
@@ -358,17 +387,33 @@
 
             let filteredPosts = allPostsData;
 
+            // 📍 1. 執行第一層過濾 (閱讀權限)
             if (currentTier1 === '公開文章') filteredPosts = filteredPosts.filter(post => !post.isPremium);
             else if (currentTier1 === '會員限定') filteredPosts = filteredPosts.filter(post => post.isPremium);
 
+            // 📍 2. 執行第二層過濾 (主題分類)
             if (currentTier2 !== '全部') filteredPosts = filteredPosts.filter(post => post.category === currentTier2);
+
+            // 📍 3. 執行第三層過濾 (🆕 搜尋關鍵字交集篩選)
+            if (currentSearchQuery) {
+                filteredPosts = filteredPosts.filter(post => {
+                    // 將該文章所有顯示的欄位組合成一個大字串，進行全面比對
+                    const searchableString = `
+                        ${post.title || ''} 
+                        ${post.category || ''} 
+                        ${post.author || ''} 
+                        ${post.excerpt || ''} 
+                        ${post.publishDate || ''}
+                    `.toLowerCase();
+                    return searchableString.includes(currentSearchQuery);
+                });
+            }
 
             if (filteredPosts.length === 0) {
                 listContainer.innerHTML = '<p style="color: var(--slate-blue); text-align: center; padding: 20px;">這個條件下目前還沒有文章喔！</p>';
                 return;
             }
 
-            // 🆕 分頁切片邏輯
             const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
             const startIndex = (currentPage - 1) * postsPerPage;
             const endIndex = startIndex + postsPerPage;
@@ -397,7 +442,6 @@
                 listContainer.innerHTML += postHTML;
             });
 
-            // 🆕 渲染分頁按鈕
             if (totalPages > 1) {
                 renderPagination(totalPages, paginationContainer);
             }
@@ -407,7 +451,6 @@
             const paginationDiv = document.createElement('div');
             paginationDiv.className = 'pagination';
 
-            // 上一頁按鈕
             const prevBtn = document.createElement('button');
             prevBtn.className = 'page-btn';
             prevBtn.innerText = '上一頁';
@@ -421,7 +464,6 @@
             };
             paginationDiv.appendChild(prevBtn);
 
-            // 頁碼按鈕
             for (let i = 1; i <= totalPages; i++) {
                 const pageBtn = document.createElement('button');
                 pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
@@ -434,7 +476,6 @@
                 paginationDiv.appendChild(pageBtn);
             }
 
-            // 下一頁按鈕
             const nextBtn = document.createElement('button');
             nextBtn.className = 'page-btn';
             nextBtn.innerText = '下一頁';
@@ -452,7 +493,6 @@
         }
 
         function scrollToList() {
-            // 切換頁碼時稍微滾動到列表頂部，體驗更好
             const section = document.getElementById('post-list-section');
             window.scrollTo({ top: section.offsetTop - 20, behavior: 'smooth' });
         }
@@ -460,6 +500,7 @@
         // --- 讀取單篇文章與留言邏輯 ---
         function readPost(id) {
             currentPostId = id;
+            document.getElementById('search-section').style.display = 'none'; // 閱讀文章時隱藏搜尋框
             document.getElementById('post-list-section').style.display = 'none';
             document.getElementById('post-detail').style.display = 'block';
             document.getElementById('comment-section').style.display = 'none'; 
@@ -507,7 +548,7 @@
 
         function submitComment() {
             const commentText = document.getElementById('new-comment').value.trim();
-            if (!commentText) return alert('請輸入留言內容！'); // 錯誤提示
+            if (!commentText) return alert('請輸入留言內容！'); 
 
             document.getElementById('btn-submit-comment').innerText = '傳送中...';
 
@@ -522,9 +563,8 @@
             .then(data => {
                 document.getElementById('btn-submit-comment').innerText = '送出留言';
                 if (data.success) {
-                    // 無縫留言，無彈窗
                     document.getElementById('new-comment').value = '';
-                    readPost(currentPostId); // 重新載入文章刷新留言
+                    readPost(currentPostId); 
                 } else {
                     alert('留言失敗：' + data.error);
                 }
@@ -533,6 +573,7 @@
 
         function backToList() {
             document.getElementById('post-detail').style.display = 'none';
+            document.getElementById('search-section').style.display = 'block'; // 返回列表時恢復顯示搜尋框
             document.getElementById('post-list-section').style.display = 'block';
             currentPostId = null;
             scrollToList();
