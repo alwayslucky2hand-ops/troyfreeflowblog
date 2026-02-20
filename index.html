@@ -5,40 +5,141 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>我的專屬數位基地</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f6f8; color: #333; }
-        h1, h2, h3 { color: #2c3e50; }
-        .section { background: #fff; padding: 25px; margin-bottom: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        
-        /* 登入區塊設計 */
-        .login-box input { padding: 10px; margin: 5px 10px 10px 0; border: 1px solid #ddd; border-radius: 6px; width: calc(50% - 25px); min-width: 200px; }
-        button { background: #3498db; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: background 0.3s; }
-        button:hover { background: #2980b9; }
-        
-        /* 分類導覽列 */
-        .category-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .cat-btn { background: #e0e6ed; color: #475569; padding: 6px 15px; border-radius: 20px; border: none; cursor: pointer; font-size: 0.9em; }
-        .cat-btn.active, .cat-btn:hover { background: #2c3e50; color: white; }
+        /* 2026 趨勢：CSS 變數、設計系統思維 */
+        :root {
+            --primary-color: #3b82f6;
+            --primary-hover: #2563eb;
+            --danger-color: #ef4444;
+            --danger-hover: #dc2626;
+            --bg-gradient: linear-gradient(135deg, #f0f4fd 0%, #e0eafc 100%);
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-        /* 文章卡片設計 */
-        .post-card { border: 1px solid #eef2f5; padding: 20px; margin-bottom: 15px; border-radius: 10px; transition: transform 0.2s; background: #fafbfc; }
-        .post-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
-        .post-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-        .post-title { font-size: 1.3em; font-weight: bold; color: #2c3e50; margin: 0; }
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            line-height: 1.7; 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            background: var(--bg-gradient); 
+            color: var(--text-main); 
+            min-height: 100vh;
+        }
+
+        h1, h2, h3 { color: #0f172a; font-weight: 700; letter-spacing: -0.02em; }
+        
+        /* 2026 趨勢：液態毛玻璃 (Liquid Glass) 區塊 */
+        .section { 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 30px; 
+            margin-bottom: 30px; 
+            border-radius: 20px; 
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow); 
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* 登入區塊設計 */
+        .login-box input { 
+            padding: 12px 16px; /* WCAG 2.2 增加觸控範圍 */
+            margin: 5px 10px 15px 0; 
+            border: 1px solid #cbd5e1; 
+            border-radius: 10px; 
+            width: calc(50% - 25px); 
+            min-width: 220px; 
+            font-size: 1rem;
+            background: rgba(255,255,255,0.8);
+            transition: var(--transition-smooth);
+        }
+        
+        .login-box input:focus-visible {
+            outline: 2px solid var(--primary-color);
+            border-color: transparent;
+            background: #fff;
+        }
+
+        button { 
+            background: var(--primary-color); 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; /* WCAG 2.2 至少 44px 高度 */
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 1rem;
+            transition: var(--transition-smooth); 
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+        
+        button:hover { 
+            background: var(--primary-hover); 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        button:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+
+        /* 分類導覽列 */
+        .category-nav { display: flex; gap: 12px; margin-bottom: 25px; flex-wrap: wrap; }
+        .cat-btn { 
+            background: #f1f5f9; 
+            color: var(--text-muted); 
+            padding: 8px 18px; 
+            border-radius: 30px; 
+            border: 1px solid #e2e8f0;
+            box-shadow: none;
+            font-size: 0.95em; 
+        }
+        .cat-btn.active, .cat-btn:hover { 
+            background: #334155; 
+            color: white; 
+            border-color: #334155;
+            transform: translateY(-1px);
+        }
+
+        /* 文章卡片設計 - 微互動 (Micro-interactions) */
+        .post-card { 
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #f1f5f9; 
+            padding: 25px; 
+            margin-bottom: 20px; 
+            border-radius: 16px; 
+            transition: var(--transition-smooth); 
+        }
+        .post-card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 12px 24px rgba(0,0,0,0.06); 
+            border-color: #e2e8f0;
+        }
+        .post-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .post-title { font-size: 1.4em; font-weight: 700; color: #0f172a; margin: 0; line-height: 1.3; }
         
         /* 中介資訊 (作者、日期、分類) */
-        .post-meta { font-size: 0.85em; color: #7f8c8d; margin-bottom: 12px; display: flex; gap: 15px; align-items: center; }
-        .meta-cat { background: #e8f4fd; color: #3498db; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+        .post-meta { font-size: 0.9em; color: var(--text-muted); margin-bottom: 15px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        .meta-cat { background: #e0f2fe; color: #0284c7; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 0.85em; }
         
-        .post-excerpt { font-size: 0.95em; color: #555; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .post-excerpt { font-size: 1em; color: #475569; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         
-        .premium-tag { background: #f39c12; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-weight: bold; }
-        .public-tag { background: #27ae60; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-weight: bold; }
+        /* 標籤視覺優化 */
+        .premium-tag { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 4px 12px; border-radius: 8px; font-size: 0.85em; font-weight: 700; box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2); }
+        .public-tag { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 4px 12px; border-radius: 8px; font-size: 0.85em; font-weight: 700; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2); }
         
         #post-detail { display: none; }
-        .back-btn { background: #95a5a6; margin-bottom: 20px; }
+        .back-btn { background: #64748b; box-shadow: 0 4px 6px rgba(100, 116, 139, 0.2); margin-bottom: 25px; }
+        .back-btn:hover { background: #475569; }
         
         /* 影片容器處理 */
-        #detail-content iframe { width: 100% !important; height: 60vh !important; max-height: 600px !important; border-radius: 8px; background-color: #000; margin: 20px 0; }
+        #detail-content iframe { width: 100% !important; height: 60vh !important; max-height: 600px !important; border-radius: 12px; background-color: #0f172a; margin: 25px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        
+        /* 載入動畫 */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -46,41 +147,43 @@
     <h1>🚀 我的專屬數位基地</h1>
 
     <div class="section login-box" id="login-section">
-        <h3>會員通行證</h3>
-        <p id="login-status" style="color: #7f8c8d; font-size: 0.9em;">目前狀態：未登入</p>
+        <h3 style="margin-top:0;">會員通行證</h3>
+        <p id="login-status" style="color: var(--text-muted); font-size: 0.95em; margin-bottom: 15px;">目前狀態：未登入</p>
         <div>
             <input type="email" id="email" placeholder="輸入 Email">
             <input type="password" id="password" placeholder="輸入密碼">
         </div>
         <div style="margin-top: 10px;">
             <button onclick="login()">登入解鎖</button>
-            <button onclick="logout()" style="background: #e74c3c;">登出</button>
+            <button onclick="logout()" style="background: var(--danger-color); box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);">登出</button>
         </div>
     </div>
 
     <div class="section" id="post-list-section">
         <div class="category-nav" id="category-container"></div>
         
-        <div id="loading-list" style="text-align: center; color: #7f8c8d; padding: 20px;">資料同步中，請稍候...</div>
+        <div id="loading-list" style="text-align: center; color: var(--text-muted); padding: 30px; font-weight: 500;">
+            <span style="display:inline-block; animation: fadeIn 1s infinite alternate;">資料同步中，請稍候...</span>
+        </div>
         <div id="post-list"></div>
     </div>
 
     <div class="section" id="post-detail">
         <button class="back-btn" onclick="backToList()">← 返回文章列表</button>
         <div class="post-meta" id="detail-meta" style="margin-top: 10px;"></div>
-        <h2 id="detail-title" style="margin-top: 5px;">文章標題</h2>
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-        <div id="detail-content" style="font-size: 1.1em; line-height: 1.8;">文章內容...</div>
+        <h2 id="detail-title" style="margin-top: 5px; font-size: 2em;">文章標題</h2>
+        <hr style="border: 0; border-top: 2px solid #e2e8f0; margin: 25px 0;">
+        <div id="detail-content" style="font-size: 1.15em; line-height: 1.8; color: #334155;">文章內容...</div>
     </div>
 
     <script>
         // ==========================================
-        // ✅ 已經為你正確寫入 GAS 網頁應用程式網址！
+        // ✅ 完美保留原始 API URL 與所有 JS 運作邏輯
         // ==========================================
         const API_URL = 'https://script.google.com/macros/s/AKfycbx6icvtdAxSLvkYB_xF9JNGW0S8dg-Eqmv58mKPkQvtRV5HoWflVrySQbjol4PHBco/exec';
 
         let currentUser = { email: '', password: '' };
-        let allPostsData = []; // 用來將所有文章暫存在前端，方便做分類切換
+        let allPostsData = []; 
 
         window.onload = () => {
             fetchPosts();
@@ -106,28 +209,25 @@
             alert('已登出！');
         }
 
-        // 取得所有文章並初始化系統
         function fetchPosts() {
             fetch(`${API_URL}?action=getPostList`)
                 .then(response => response.json())
                 .then(posts => {
-                    allPostsData = posts; // 將資料暫存
+                    allPostsData = posts; 
                     document.getElementById('loading-list').style.display = 'none';
                     
-                    renderCategoryButtons(); // 生成分類按鈕
-                    renderPosts('全部');     // 預設顯示全部文章
+                    renderCategoryButtons(); 
+                    renderPosts('全部');     
                 })
                 .catch(error => {
                     document.getElementById('loading-list').innerText = '載入失敗，請檢查 API 網址是否正確。';
                 });
         }
 
-        // 動態生成分類按鈕
         function renderCategoryButtons() {
             const container = document.getElementById('category-container');
             container.innerHTML = '';
             
-            // 提取所有不重複的分類
             const categories = ['全部'];
             allPostsData.forEach(post => {
                 if (post.category && !categories.includes(post.category)) {
@@ -135,22 +235,19 @@
                 }
             });
 
-            // 建立按鈕
             categories.forEach(cat => {
                 const btn = document.createElement('button');
                 btn.className = cat === '全部' ? 'cat-btn active' : 'cat-btn';
                 btn.innerText = cat;
                 btn.onclick = (e) => {
-                    // 移除所有按鈕的 active 樣式
                     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active'); // 點擊的按鈕反白
-                    renderPosts(cat); // 依照分類重新渲染列表
+                    e.target.classList.add('active'); 
+                    renderPosts(cat); 
                 };
                 container.appendChild(btn);
             });
         }
 
-        // 渲染文章列表 (支援分類過濾)
         function renderPosts(filterCategory) {
             const listContainer = document.getElementById('post-list');
             listContainer.innerHTML = ''; 
@@ -167,7 +264,6 @@
             filteredPosts.forEach(post => {
                 const tag = post.isPremium ? '<span class="premium-tag">🔒 會員限定</span>' : '<span class="public-tag">📖 公開文章</span>';
                 
-                // 格式化日期顯示
                 let displayDate = "未知日期";
                 if (post.publishDate) {
                     const d = new Date(post.publishDate);
@@ -176,7 +272,6 @@
                     }
                 }
 
-                // 處理簡述內容
                 const excerptText = post.excerpt ? post.excerpt : "點擊閱讀完整內容...";
 
                 const postHTML = `
@@ -191,14 +286,13 @@
                             <span>🗓️ ${displayDate}</span>
                         </div>
                         <div class="post-excerpt">${excerptText}</div>
-                        <button onclick="readPost('${post.id}')" style="background: #2c3e50;">閱讀全文</button>
+                        <button onclick="readPost('${post.id}')">閱讀全文</button>
                     </div>
                 `;
                 listContainer.innerHTML += postHTML;
             });
         }
 
-        // 讀取單篇文章內容
         function readPost(id) {
             document.getElementById('post-list-section').style.display = 'none';
             document.getElementById('post-detail').style.display = 'block';
@@ -213,7 +307,6 @@
                 .then(data => {
                     document.getElementById('detail-title').innerText = data.title;
                     
-                    // 渲染文章頁面的作者與時間資訊
                     document.getElementById('detail-meta').innerHTML = `
                         <span class="meta-cat">${data.category || '未分類'}</span>
                         <span>✍️ ${data.author || '匿名'}</span>
@@ -222,10 +315,10 @@
 
                     if (data.error) {
                         document.getElementById('detail-content').innerHTML = `
-                            <div style="background: #ffeaa7; padding: 20px; border-radius: 8px; text-align: center;">
-                                <h3 style="color: #d35400;">🔒 需要通行權限</h3>
-                                <p style="color: #c0392b; font-weight:bold;">${data.error}</p>
-                                <p>這是一篇會員專屬的高價值內容。請返回首頁輸入正確的帳號密碼來解鎖。</p>
+                            <div style="background: #fef3c7; padding: 25px; border-radius: 12px; text-align: center; border: 1px solid #fde68a;">
+                                <h3 style="color: #d97706; margin-top:0;">🔒 需要通行權限</h3>
+                                <p style="color: #b45309; font-weight:bold; font-size: 1.1em;">${data.error}</p>
+                                <p style="color: #92400e;">這是一篇會員專屬的高價值內容。請返回首頁輸入正確的帳號密碼來解鎖。</p>
                             </div>
                         `;
                     } else {
