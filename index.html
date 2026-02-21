@@ -83,9 +83,10 @@
     <div class="section" id="login-section">
         <h3 style="margin-top:0;">版規與會員通行證</h3>
         <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">
-            歡迎來到基地！為維持高品質交流，請輸入 Email 進行驗證登入。登入後，系統將於背景紀錄您的信箱以解鎖完整會員文章、愛心推薦與留言功能。
+            歡迎來到基地！<br>
+            公開文章可自由瀏覽與匿名互動。若要閱讀「會員限定」文章，請輸入信箱驗證。登入後的所有留言與愛心推薦，將自動綁定您的信箱紀錄。
         </p>
-        <p id="login-status" style="color: var(--slate-blue); font-weight: bold; margin-bottom: 15px;">目前狀態：未登入</p>
+        <p id="login-status" style="color: var(--slate-blue); font-weight: bold; margin-bottom: 15px;">目前狀態：未登入 (訪客)</p>
         
         <div id="step-1" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
             <input type="email" id="email" class="input-box" placeholder="輸入會員 Email" style="flex: 2; max-width: 300px; margin-bottom: 0;">
@@ -95,7 +96,7 @@
         
         <div id="step-2" style="display: none; margin-top: 10px;">
             <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
-                <input type="text" id="otp-code" class="input-box" placeholder="輸入信箱內的 6 位數驗證碼" style="flex: 2; max-width: 300px; margin-bottom: 0;">
+                <input type="text" id="otp-code" class="input-box" placeholder="輸入 6 位數驗證碼" style="flex: 2; max-width: 300px; margin-bottom: 0;">
                 <button onclick="verifyLogin()" id="btn-login" style="flex: 1; margin-bottom: 0; width: auto; min-width: 120px;">登入通行</button>
                 <button onclick="cancelLogin()" style="flex: 1; margin-bottom: 0; width: auto; min-width: 80px; background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border);">返回</button>
             </div>
@@ -140,14 +141,13 @@
                 <strong style="color:var(--slate-blue); display:block; margin-bottom:10px;">新增主留言</strong>
                 <textarea id="new-comment" class="input-box" placeholder="寫下您的看法..." style="height: 80px; margin-bottom: 10px; resize: vertical;"></textarea>
                 <button onclick="submitComment('main', null, this)" style="width: auto;">送出留言</button>
-                <span id="comment-msg" class="inline-msg" style="text-align: left;"></span>
             </div>
         </div>
     </div>
 
     <script>
         // 🚨 替換為你的 GAS 網址
-        const API_URL = 'https://script.google.com/macros/s/AKfycby39QPMtgbFBrMELwL9vApEEVJYQ5DBhS2OEb3BQWeThIgScbCblbGIhaijNvyzFywq/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzlYjn5QSz2cMnRIkRiGMHM3J6iLnGmJnnvQLSx-iDR7FPgpKlTSjjuuiYd5hcl0pw/exec';
 
         let currentUserEmail = ''; 
         let allPostsData = []; 
@@ -181,8 +181,10 @@
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'requestOTP', payload: { email } }) })
             .then(res => res.json()).then(data => {
                 document.getElementById('btn-otp').innerText = "寄送驗證碼";
-                if (data.error) return showMsg('otp-msg', data.error, true);
-                
+                if (data.error) {
+                    alert(data.error); // 錯誤時用彈窗明顯提示
+                    return showMsg('otp-msg', '', true);
+                }
                 document.getElementById('step-1').style.display = 'none';
                 document.getElementById('step-2').style.display = 'block';
                 showMsg('login-msg', '驗證碼已寄出，請去信箱查看');
@@ -198,10 +200,13 @@
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'verifyOTP', payload: { email, otp } }) })
             .then(res => res.json()).then(data => {
                 document.getElementById('btn-login').innerText = "登入通行";
-                if (data.error) return showMsg('login-msg', data.error, true);
+                if (data.error) {
+                    alert(data.error); 
+                    return showMsg('login-msg', '', true);
+                }
                 
                 currentUserEmail = email;
-                document.getElementById('login-status').innerText = `已登入：${email}`;
+                document.getElementById('login-status').innerText = `✅ 已登入會員：${email}`;
                 document.getElementById('step-1').style.display = 'none';
                 document.getElementById('step-2').style.display = 'none';
                 document.getElementById('logout-btn-container').style.display = 'block';
@@ -210,7 +215,7 @@
         }
 
         function cancelLogin() { document.getElementById('step-1').style.display = 'flex'; document.getElementById('step-2').style.display = 'none'; }
-        function logout() { currentUserEmail = ''; document.getElementById('email').value = ''; document.getElementById('otp-code').value = ''; document.getElementById('login-status').innerText = '目前狀態：未登入'; document.getElementById('step-1').style.display = 'flex'; document.getElementById('logout-btn-container').style.display = 'none'; fetchPosts(); }
+        function logout() { currentUserEmail = ''; document.getElementById('email').value = ''; document.getElementById('otp-code').value = ''; document.getElementById('login-status').innerText = '目前狀態：未登入 (訪客)'; document.getElementById('step-1').style.display = 'flex'; document.getElementById('logout-btn-container').style.display = 'none'; fetchPosts(); }
 
         // --- 載入與渲染列表 ---
         function fetchPosts() {
@@ -318,33 +323,30 @@
                 `;
 
                 if (data.error && data.requiresLogin) {
+                    // 會員專屬未登入
                     document.getElementById('detail-content').innerHTML = `<div class="lock-mask">${data.error}</div>`;
                 } else {
+                    // 內容解鎖
                     document.getElementById('detail-content').innerHTML = data.content;
 
-                    // 渲染互動列與留言區
-                    if (data.requiresAuthForComments) {
-                        document.getElementById('interaction-container').innerHTML = `<div class="lock-mask">${data.error}</div>`;
-                    } else {
-                        // 互動列 (愛心)
-                        const likeClass = data.hasLiked ? "btn-interact active" : "btn-interact";
-                        const likeText = data.hasLiked ? `取消推薦 (${data.likeCount})` : `推薦文章 (${data.likeCount})`;
-                        document.getElementById('interaction-container').innerHTML = `
-                            <div class="interaction-bar">
-                                <button class="${likeClass}" id="btn-like" onclick="toggleLike(this)">${likeText}</button>
-                            </div>
-                        `;
+                    // 互動列 (愛心)
+                    const likeClass = data.hasLiked ? "btn-interact active" : "btn-interact";
+                    const likeText = data.hasLiked ? `取消推薦 (${data.likeCount})` : `推薦文章 (${data.likeCount})`;
+                    document.getElementById('interaction-container').innerHTML = `
+                        <div class="interaction-bar">
+                            <button class="${likeClass}" id="btn-like" onclick="toggleLike(this)">${likeText}</button>
+                            <button class="btn-interact" onclick="toggleElement('comment-section')">留言討論 (${data.commentCount})</button>
+                        </div>
+                    `;
 
-                        // 渲染留言 (首 5 則收合邏輯)
-                        renderComments(data.comments);
-                        document.getElementById('comment-section').style.display = 'block';
-                    }
+                    // 渲染留言 (首 5 則收合邏輯)
+                    renderComments(data.comments);
+                    document.getElementById('comment-section').style.display = 'block';
                 }
             });
         }
 
         function toggleLike(btn) {
-            if (!currentUserEmail) return alert("請先登入");
             btn.innerText = "處理中..."; btn.disabled = true;
             fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'toggleLike', payload: { id: currentPostId, email: currentUserEmail } }) })
             .then(() => readPost(currentPostId)); // 重新整理文章獲取最新數字
@@ -398,8 +400,6 @@
         }
 
         function submitComment(type, colIndex, btn) {
-            if (!currentUserEmail) return alert("請先登入");
-            
             let content = "";
             if (type === 'main') {
                 content = document.getElementById(`new-comment`).value.trim();
@@ -416,7 +416,6 @@
                 btn.innerText = originalText; btn.disabled = false;
                 if (data.success) {
                     if(type === 'main') document.getElementById('new-comment').value = '';
-                    showMsg('comment-msg', '發表成功！');
                     readPost(currentPostId); 
                 } else alert('發生錯誤');
             });
