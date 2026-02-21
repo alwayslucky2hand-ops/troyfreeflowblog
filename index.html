@@ -497,7 +497,7 @@
             window.scrollTo({ top: section.offsetTop - 20, behavior: 'smooth' });
         }
 
-        // --- 讀取單篇文章與留言邏輯 ---
+// --- 讀取單篇文章與留言邏輯 ---
         function readPost(id) {
             currentPostId = id;
             document.getElementById('search-section').style.display = 'none'; // 閱讀文章時隱藏搜尋框
@@ -514,9 +514,12 @@
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('detail-title').innerText = data.title;
+                    
+                    // 🌟 這裡補上：顯示分類、作者與發佈日期
                     document.getElementById('detail-meta').innerHTML = `
                         <span class="meta-cat">${data.category || '未分類'}</span>
                         <span>✍️ ${data.author || '匿名'}</span>
+                        <span>🗓️ ${data.publishDate || '未知日期'}</span>
                     `;
 
                     if (data.error) {
