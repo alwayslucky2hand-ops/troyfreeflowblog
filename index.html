@@ -5,581 +5,430 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>特洛伊AI賦能基地</title>
     <style>
-        /* ==========================================
-           🎨 品牌專屬視覺變數設定 (已調和色調與框線)
-           ========================================== */
         :root {
-            --primary-yellow: #E1B12C;     /* 調整為更溫潤的芥末暖黃色 */
-            --primary-hover: #C89D26;      /* 懸停加深 */
-            --slate-blue: #708090;         /* 輔色：板岩藍 */
-            --accent-green: #619A86;       /* 強調色：灰綠色 */
-            --danger-color: #e17055;
-            --bg-color: #FFFFFF;           
-            --text-main: #333333;          
-            --text-muted: #64748b;
-            --glass-border: #cbd5e1;       /* 加深框線，提升立體感 */
+            --primary-yellow: #E1B12C; --primary-hover: #C89D26;      
+            --slate-blue: #708090; --accent-green: #619A86;       
+            --danger-color: #e17055; --bg-color: #FFFFFF;           
+            --text-main: #333333; --text-muted: #64748b; --glass-border: #cbd5e1;       
         }
-
         *, *::before, *::after { box-sizing: border-box; }
-
-        body { 
-            font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif; 
-            line-height: 1.8; 
-            max-width: 800px; 
-            margin: 0 auto; 
-            padding: 40px 20px; 
-            background: var(--bg-color); 
-            color: var(--text-main); 
-            min-height: 100vh;
-        }
-
-        h1, h2, h3 { 
-            font-family: 'Microsoft JhengHei', sans-serif; 
-            font-weight: bold; 
-            color: var(--slate-blue); 
-            letter-spacing: 0.05em;
-        }
-
-        .section { 
-            background: #ffffff; 
-            padding: 40px; 
-            margin-bottom: 40px; 
-            border-radius: 12px; 
-            border: 1px solid var(--glass-border);
-        }
-
-        .login-box input, .comment-box textarea { 
-            padding: 14px 18px; 
-            margin: 5px 10px 15px 0; 
-            border: 1px solid var(--glass-border); 
-            border-radius: 8px; 
-            width: calc(50% - 15px); 
-            font-size: 1rem;
-            font-family: 'Microsoft JhengHei', sans-serif;
-            transition: all 0.3s ease;
-        }
-        .login-box input:focus, .comment-box textarea:focus {
-            outline: none;
-            border-color: var(--primary-yellow);
-            box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2);
-        }
-        .comment-box textarea { width: 100%; height: 100px; resize: vertical; }
-
-        button { 
-            background: var(--primary-yellow); 
-            color: #ffffff; 
-            border: none; 
-            padding: 12px 28px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 1rem;
-            transition: background 0.2s;
-        }
-        button:hover { background: var(--primary-hover); }
-
-        /* 🆕 搜尋框樣式 */
-        .search-box { 
-            width: 100%; 
-            padding: 16px 20px; 
-            border: 1px solid var(--glass-border); 
-            border-radius: 12px; 
-            font-size: 1rem; 
-            color: var(--text-main); 
-            background: #f8fafc; 
-            transition: all 0.3s ease; 
-            font-family: 'Microsoft JhengHei', sans-serif;
-        }
-        .search-box:focus { 
-            outline: none; 
-            border-color: var(--primary-yellow); 
-            background: var(--bg-color);
-            box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); 
-        }
-        .search-box::placeholder { color: var(--text-muted); font-weight: normal; }
-
-        .filter-section {
-            margin-bottom: 35px; 
-            padding: 20px; 
-            border-radius: 12px; 
-            border: 1px solid var(--glass-border);
-        }
-        .filter-title {
-            margin-bottom: 12px; 
-            font-weight: bold; 
-            color: var(--slate-blue); 
-            font-size: 0.9em;
-            letter-spacing: 0.05em;
-        }
-        .category-nav { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-        .cat-btn { 
-            background: #f8fafc; 
-            color: var(--slate-blue); 
-            padding: 8px 20px; 
-            border-radius: 30px; 
-            border: 1px solid var(--glass-border); 
-            font-size: 0.95em; 
-            font-weight: normal;
-        }
-        .cat-btn.active { 
-            background: var(--slate-blue); 
-            color: #ffffff; 
-            border-color: var(--slate-blue);
-        }
-
-        .post-card { 
-            background: #fff; 
-            border: 1px solid var(--glass-border); 
-            padding: 35px; 
-            margin-bottom: 25px; 
-            border-radius: 12px; 
-            transition: transform 0.2s ease;
-        }
-        .post-card:hover { transform: translateY(-2px); }
-        .post-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-        .post-title { font-size: 1.5em; margin: 0; color: #2d3436; }
+        body { font-family: 'Microsoft JhengHei', sans-serif; line-height: 1.8; max-width: 800px; margin: 0 auto; padding: 40px 20px; background: var(--bg-color); color: var(--text-main); min-height: 100vh; }
+        h1, h2, h3 { color: var(--slate-blue); letter-spacing: 0.05em; font-weight: bold; margin-bottom: 24px; }
         
-        .premium-tag { background: var(--primary-yellow); color: #ffffff; padding: 4px 12px; border-radius: 6px; font-size: 0.85em; font-weight: bold; }
-        .public-tag { background: var(--accent-green); color: white; padding: 4px 12px; border-radius: 6px; font-size: 0.85em; font-weight: bold; }
+        .section { background: #ffffff; padding: 40px; margin-bottom: 40px; border-radius: 12px; border: 1px solid var(--glass-border); }
+        
+        .input-box, textarea { padding: 14px 18px; border: 1px solid var(--glass-border); border-radius: 12px; font-size: 1rem; font-family: inherit; transition: all 0.3s ease; width: 100%; margin-bottom: 10px; background: #f8fafc; }
+        .input-box:focus, textarea:focus { outline: none; border-color: var(--primary-yellow); background: #ffffff; box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); }
+        
+        button { background: var(--primary-yellow); color: #ffffff; border: none; padding: 14px 28px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.2s; width: 100%; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        button:hover { background: var(--primary-hover); }
+        button:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
+        
+        .inline-msg { font-size: 0.9em; font-weight: bold; display: block; margin-top: 5px; min-height: 24px; transition: opacity 0.3s; }
+        .msg-error { color: var(--danger-color); }
+        .msg-success { color: var(--accent-green); }
+
+        .filter-section { margin-bottom: 35px; padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border); }
+        .filter-title { margin-bottom: 12px; font-weight: bold; color: var(--slate-blue); font-size: 0.9em; letter-spacing: 0.05em; }
+        .category-nav { display: flex; gap: 12px; flex-wrap: nowrap; overflow-x: auto; margin-bottom: 20px;}
+        .cat-btn { background: #f8fafc; color: var(--slate-blue); padding: 8px 20px; border-radius: 30px; border: 1px solid var(--glass-border); font-size: 0.95em; cursor: pointer; width: auto; margin-bottom:0; box-shadow: none; white-space: nowrap;}
+        .cat-btn.active { background: var(--slate-blue); color: #ffffff; border-color: var(--slate-blue); }
+
+        .post-card { background: #fff; border: 1px solid var(--glass-border); padding: 35px; margin-bottom: 25px; border-radius: 12px; }
+        .post-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .post-title { font-size: 1.5em; margin: 0; color: #2d3436; font-weight: bold; }
+        .tag-badge { padding: 4px 12px; border-radius: 6px; font-size: 0.85em; font-weight: bold; color: white; display: inline-block; white-space: nowrap; }
+        .tag-premium { background: var(--primary-yellow); }
+        .tag-public { background: var(--accent-green); }
         
         .post-meta { font-size: 0.9em; color: var(--slate-blue); margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; }
         .meta-cat { background: #f1f5f9; padding: 4px 12px; border-radius: 6px; border: 1px solid var(--glass-border); }
         .post-excerpt { color: #636e72; margin-bottom: 25px; }
 
         #post-detail { display: none; }
-        .comment-box { margin-top: 50px; border-top: 2px dashed var(--glass-border); padding-top: 30px; }
-        .comment-item { 
-            background: #fafafa; 
-            padding: 16px; 
-            border-radius: 8px; 
-            margin-bottom: 15px; 
-            border-left: 4px solid var(--accent-green); 
-            color: #2d3436;
-        }
+        
+        /* 互動與留言區 */
+        .interaction-bar { display: flex; gap: 10px; margin-top: 20px; border-top: 1px dashed var(--glass-border); padding-top: 20px; flex-wrap: wrap; }
+        .btn-interact { background: #f8fafc; color: var(--slate-blue); border: 1px solid var(--glass-border); width: auto; padding: 8px 16px; font-size: 0.95rem; box-shadow: none; margin-bottom: 0; }
+        .btn-interact.active { background: var(--accent-green); color: #ffffff; border-color: var(--accent-green); }
+        
+        .comments-wrapper { margin-top: 20px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border); }
+        .comment-item { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid var(--accent-green); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .comment-text { font-size: 1rem; color: var(--text-dark); white-space: pre-wrap; word-break: break-word; }
+        
+        .nested-replies { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--glass-border); padding-left: 10px; }
+        .nested-reply-item { margin-bottom: 10px; font-size: 0.95rem; color: #475569; padding-left: 15px; border-left: 2px solid var(--glass-border); white-space: pre-wrap; }
 
+        .system-msg { text-align: center; color: var(--slate-blue); padding: 40px 20px; font-size: 1.1rem; font-weight: bold; }
         .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 30px; flex-wrap: wrap; }
-        .page-btn { 
-            background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border); 
-            padding: 8px 16px; border-radius: 6px; font-size: 0.9em; font-weight: normal; 
-        }
-        .page-btn.active { background: var(--slate-blue); color: #ffffff; border-color: var(--slate-blue); }
-        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .page-btn { background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 6px; cursor: pointer; width: auto; margin-bottom: 0; box-shadow: none; }
+        .page-btn.active { background: var(--slate-blue); color: #ffffff; }
 
-        @media (max-width: 600px) {
+        .lock-mask { background: #fffbe6; padding: 20px; text-align: center; border-radius: 8px; color: #8c6b0a; border: 1px solid var(--primary-yellow); margin-top: 15px; font-weight: bold; }
+
+        @media (max-width: 600px) { 
             body { padding: 20px 15px; } 
             .section, .post-card { padding: 25px 20px; } 
-            .login-box input, button, .page-btn { width: 100%; margin: 0 0 10px 0; } 
-            .post-title-row { flex-direction: column; gap: 10px; }
-            #search-section { padding: 25px 20px !important; }
+            .post-title-row { flex-direction: column; gap: 10px; } 
+            #step-1, #step-2 div { flex-direction: column; align-items: stretch; }
+            #email, #otp-code { max-width: 100% !important; }
+            #login-section button { width: 100%; min-width: auto !important; }
         }
     </style>
 </head>
 <body>
 
-    <h1> 特洛伊AI賦能基地 </h1>
+    <h1>特洛伊AI賦能基地</h1>
 
-    <div class="section login-box" id="login-section">
-        <h3 style="margin-top:0;">會員通行證</h3>
-        <p id="login-status" style="color: var(--slate-blue); font-size: 0.95em; margin-bottom: 20px;">目前狀態：未登入</p>
+    <div class="section" id="login-section">
+        <h3 style="margin-top:0;">版規與會員通行證</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">
+            歡迎來到基地！為維持高品質交流，請輸入 Email 進行驗證登入。登入後，系統將於背景紀錄您的信箱以解鎖完整會員文章、愛心推薦與留言功能。
+        </p>
+        <p id="login-status" style="color: var(--slate-blue); font-weight: bold; margin-bottom: 15px;">目前狀態：未登入</p>
         
-        <div id="step-1">
-            <input type="email" id="email" placeholder="輸入會員 Email">
-            <button onclick="requestOTP()" id="btn-otp">寄送驗證碼</button>
-            <span id="otp-msg" style="color: var(--accent-green); font-size: 0.9em; margin-left: 10px; display: none;">驗證碼已寄出</span>
+        <div id="step-1" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
+            <input type="email" id="email" class="input-box" placeholder="輸入會員 Email" style="flex: 2; max-width: 300px; margin-bottom: 0;">
+            <button onclick="requestOTP()" id="btn-otp" style="flex: 1; margin-bottom: 0; width: auto; min-width: 120px;">寄送驗證碼</button>
+            <span id="otp-msg" class="inline-msg" style="width: 100%;"></span>
         </div>
         
         <div id="step-2" style="display: none; margin-top: 10px;">
-            <input type="text" id="otp-code" placeholder="輸入信箱內的 6 位數驗證碼">
-            <button onclick="verifyLogin()">登入解鎖</button>
-            <button onclick="cancelLogin()" style="background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border);">返回</button>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
+                <input type="text" id="otp-code" class="input-box" placeholder="輸入信箱內的 6 位數驗證碼" style="flex: 2; max-width: 300px; margin-bottom: 0;">
+                <button onclick="verifyLogin()" id="btn-login" style="flex: 1; margin-bottom: 0; width: auto; min-width: 120px;">登入通行</button>
+                <button onclick="cancelLogin()" style="flex: 1; margin-bottom: 0; width: auto; min-width: 80px; background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border);">返回</button>
+            </div>
+            <span id="login-msg" class="inline-msg" style="width: 100%;"></span>
         </div>
         
-        <div style="margin-top: 15px;">
-            <button onclick="logout()" style="background: var(--danger-color); color: white;">登出</button>
+        <div id="logout-btn-container" style="display: none; margin-top: 25px; border-top: 1px dashed var(--glass-border); padding-top: 20px;">
+            <button onclick="logout()" style="background: var(--danger-color); width: auto;">登出</button>
         </div>
     </div>
 
     <div class="section" id="search-section" style="padding: 25px 40px;">
-        <input type="text" id="searchInput" class="search-box" placeholder="🔍 輸入關鍵字搜尋文章標題、內容、分類或作者..." oninput="handleSearch()">
+        <input type="text" id="searchInput" class="input-box search-box" placeholder="輸入關鍵字搜尋文章標題、內容或作者..." oninput="handleSearch()">
     </div>
 
     <div class="section" id="post-list-section">
         <div class="filter-section">
             <div class="filter-title">閱讀權限</div>
             <div class="category-nav" id="tier1-container"></div>
-            
             <div class="filter-title" style="margin-top: 10px;">主題分類</div>
             <div class="category-nav" id="tier2-container" style="margin-bottom: 0;"></div>
         </div>
-
-        <div id="loading-list" style="text-align: center; color: var(--slate-blue); padding: 30px;">資料同步中，請稍候...</div>
+        <div id="loading-list" class="system-msg">資料同步中，請稍候...</div>
         <div id="post-list"></div>
-        <div id="pagination-container"></div> 
+        <div id="pagination-container" class="pagination"></div> 
     </div>
 
     <div class="section" id="post-detail">
-        <button onclick="backToList()" style="background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border);">← 返回文章列表</button>
+        <button onclick="backToList()" style="background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border); width: auto; box-shadow: none;">返回文章列表</button>
         <div class="post-meta" id="detail-meta" style="margin-top: 25px;"></div>
-        <h2 id="detail-title" style="margin-top: 5px; font-size: 2em; color: #2d3436;">載入中...</h2>
+        <h2 id="detail-title" style="margin-top: 5px; font-size: 2em;">載入中...</h2>
         <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 30px 0;">
-        <div id="detail-content" style="font-size: 1.1em; line-height: 2;"></div>
         
-        <div class="comment-box" id="comment-section" style="display: none;">
-            <h3>💬 留言討論</h3>
-            <div id="comments-list" style="margin-bottom: 20px;"></div>
-            <textarea id="new-comment" placeholder="寫下你的想法或問題..."></textarea>
-            <button onclick="submitComment()" id="btn-submit-comment">送出留言</button>
+        <div id="detail-content" style="font-size: 1.1em; line-height: 2;"></div>
+        <div id="interaction-container"></div>
+        
+        <div id="comment-section" style="display: none; margin-top: 40px;">
+            <h3 style="margin-bottom: 20px;">留言討論</h3>
+            <div id="comments-list"></div>
+            
+            <div id="main-reply-box" style="margin-top:20px; border-top:2px solid var(--glass-border); padding-top:20px;">
+                <strong style="color:var(--slate-blue); display:block; margin-bottom:10px;">新增主留言</strong>
+                <textarea id="new-comment" class="input-box" placeholder="寫下您的看法..." style="height: 80px; margin-bottom: 10px; resize: vertical;"></textarea>
+                <button onclick="submitComment('main', null, this)" style="width: auto;">送出留言</button>
+                <span id="comment-msg" class="inline-msg" style="text-align: left;"></span>
+            </div>
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycby8P65RkUo8msLizvYM8cLTW_KZTrbz8q2narlec-3DT72hO363eKPqJEiYbWAfjd7r/exec';
+        // 🚨 替換為你的 GAS 網址
+        const API_URL = 'https://script.google.com/macros/s/AKfycby39QPMtgbFBrMELwL9vApEEVJYQ5DBhS2OEb3BQWeThIgScbCblbGIhaijNvyzFywq/exec';
 
-        let currentUser = { email: '', verified: false };
+        let currentUserEmail = ''; 
         let allPostsData = []; 
         let currentPostId = null;
-        
         let currentTier1 = '全部'; 
         let currentTier2 = '全部'; 
-        let currentSearchQuery = ''; // 🆕 新增：儲存當前的搜尋關鍵字
-
+        let currentSearchQuery = ''; 
         let currentPage = 1;
         const postsPerPage = 10;
 
         window.onload = () => fetchPosts();
 
-        // 🆕 新增：處理搜尋框輸入事件
-        function handleSearch() {
-            currentSearchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
-            currentPage = 1; // 重新搜尋時自動回到第一頁
-            renderPosts();
+        function showMsg(id, text, isError = false) {
+            const el = document.getElementById(id);
+            el.innerText = text;
+            el.className = `inline-msg ${isError ? 'msg-error' : 'msg-success'}`;
+            setTimeout(() => el.innerText = '', 4000);
         }
 
-        // --- 登入與驗證邏輯 ---
+        function toggleElement(id) {
+            const el = document.getElementById(id);
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // --- 登入機制 ---
         function requestOTP() {
-            const emailInput = document.getElementById('email').value;
-            if (!emailInput) return alert('請先輸入 Email'); 
+            const email = document.getElementById('email').value.trim();
+            if (!email) return showMsg('otp-msg', '請先輸入 Email', true);
             
             document.getElementById('btn-otp').innerText = "寄送中...";
-            document.getElementById('otp-msg').style.display = 'none';
-            
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'requestOTP', payload: { email: emailInput } })
-            })
-            .then(res => res.json())
-            .then(data => {
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'requestOTP', payload: { email } }) })
+            .then(res => res.json()).then(data => {
                 document.getElementById('btn-otp').innerText = "寄送驗證碼";
-                if (data.error) return alert(data.error); 
+                if (data.error) return showMsg('otp-msg', data.error, true);
                 
                 document.getElementById('step-1').style.display = 'none';
                 document.getElementById('step-2').style.display = 'block';
-                document.getElementById('otp-msg').style.display = 'inline';
-            }).catch(err => {
-                alert("連線錯誤");
-                document.getElementById('btn-otp').innerText = "寄送驗證碼";
-            });
+                showMsg('login-msg', '驗證碼已寄出，請去信箱查看');
+            }).catch(() => { document.getElementById('btn-otp').innerText = "寄送驗證碼"; showMsg('otp-msg', '連線失敗', true); });
         }
 
         function verifyLogin() {
-            const emailInput = document.getElementById('email').value;
-            const otpInput = document.getElementById('otp-code').value;
-            if (!otpInput) return alert('請輸入驗證碼'); 
+            const email = document.getElementById('email').value.trim();
+            const otp = document.getElementById('otp-code').value.trim();
+            if (!otp) return showMsg('login-msg', '請輸入驗證碼', true);
 
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ action: 'verifyOTP', payload: { email: emailInput, otp: otpInput } })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.error) return alert(data.error); 
+            document.getElementById('btn-login').innerText = "驗證中...";
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'verifyOTP', payload: { email, otp } }) })
+            .then(res => res.json()).then(data => {
+                document.getElementById('btn-login').innerText = "登入通行";
+                if (data.error) return showMsg('login-msg', data.error, true);
                 
-                currentUser = { email: emailInput, verified: true };
-                document.getElementById('login-status').innerText = `✅ 目前狀態：已登入 (${emailInput})`;
-                document.getElementById('step-1').style.display = 'block';
+                currentUserEmail = email;
+                document.getElementById('login-status').innerText = `已登入：${email}`;
+                document.getElementById('step-1').style.display = 'none';
                 document.getElementById('step-2').style.display = 'none';
-                document.getElementById('otp-code').value = '';
+                document.getElementById('logout-btn-container').style.display = 'block';
+                fetchPosts(); 
             });
         }
 
-        function cancelLogin() {
-            document.getElementById('step-1').style.display = 'block';
-            document.getElementById('step-2').style.display = 'none';
-        }
+        function cancelLogin() { document.getElementById('step-1').style.display = 'flex'; document.getElementById('step-2').style.display = 'none'; }
+        function logout() { currentUserEmail = ''; document.getElementById('email').value = ''; document.getElementById('otp-code').value = ''; document.getElementById('login-status').innerText = '目前狀態：未登入'; document.getElementById('step-1').style.display = 'flex'; document.getElementById('logout-btn-container').style.display = 'none'; fetchPosts(); }
 
-        function logout() {
-            currentUser = { email: '', verified: false };
-            document.getElementById('email').value = '';
-            document.getElementById('login-status').innerText = '目前狀態：未登入';
-        }
-
-        // --- 讀取與渲染列表邏輯 ---
+        // --- 載入與渲染列表 ---
         function fetchPosts() {
-            fetch(`${API_URL}?action=getPostList`)
-                .then(response => response.json())
-                .then(posts => {
-                    allPostsData = posts; 
-                    document.getElementById('loading-list').style.display = 'none';
-                    renderCategoryFilters(); 
-                    renderPosts();     
-                });
+            let url = `${API_URL}?action=getPostList`;
+            if (currentUserEmail) url += `&email=${encodeURIComponent(currentUserEmail)}`;
+            
+            fetch(url).then(r => r.json()).then(posts => {
+                allPostsData = posts; 
+                document.getElementById('loading-list').style.display = 'none';
+                renderCategoryFilters(); renderPosts();     
+            });
         }
+
+        function handleSearch() { currentSearchQuery = document.getElementById('searchInput').value.toLowerCase().trim(); currentPage = 1; renderPosts(); }
 
         function renderCategoryFilters() {
-            renderTier1();
-            renderTier2();
-        }
-
-        function renderTier1() {
-            const container = document.getElementById('tier1-container');
-            container.innerHTML = '';
-            const options = ['全部', '公開文章', '會員限定'];
-            
-            options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = opt === currentTier1 ? 'cat-btn active' : 'cat-btn';
-                btn.innerText = opt;
-                btn.onclick = () => {
-                    currentTier1 = opt;
-                    currentTier2 = '全部'; 
-                    currentPage = 1; 
-                    renderCategoryFilters(); 
-                    renderPosts(); 
-                };
-                container.appendChild(btn);
+            const t1 = document.getElementById('tier1-container'); t1.innerHTML = '';
+            ['全部', '公開文章', '會員限定'].forEach(opt => {
+                const btn = document.createElement('button'); btn.className = opt === currentTier1 ? 'cat-btn active' : 'cat-btn';
+                btn.innerText = opt; btn.onclick = () => { currentTier1 = opt; currentTier2 = '全部'; currentPage = 1; renderCategoryFilters(); renderPosts(); };
+                t1.appendChild(btn);
             });
-        }
 
-        function renderTier2() {
-            const container = document.getElementById('tier2-container');
-            container.innerHTML = '';
-            
+            const t2 = document.getElementById('tier2-container'); t2.innerHTML = '';
             let validPosts = allPostsData;
             if (currentTier1 === '公開文章') validPosts = allPostsData.filter(p => !p.isPremium);
             if (currentTier1 === '會員限定') validPosts = allPostsData.filter(p => p.isPremium);
 
             let categories = ['全部'];
-            validPosts.forEach(post => {
-                if (post.category && !categories.includes(post.category)) {
-                    categories.push(post.category);
-                }
-            });
-
+            validPosts.forEach(post => { if (post.category && !categories.includes(post.category)) categories.push(post.category); });
             categories.forEach(cat => {
-                const btn = document.createElement('button');
-                btn.className = cat === currentTier2 ? 'cat-btn active' : 'cat-btn';
-                btn.innerText = cat;
-                btn.onclick = () => {
-                    currentTier2 = cat;
-                    currentPage = 1; 
-                    renderTier2(); 
-                    renderPosts(); 
-                };
-                container.appendChild(btn);
+                const btn = document.createElement('button'); btn.className = cat === currentTier2 ? 'cat-btn active' : 'cat-btn';
+                btn.innerText = cat; btn.onclick = () => { currentTier2 = cat; currentPage = 1; renderCategoryFilters(); renderPosts(); };
+                t2.appendChild(btn);
             });
         }
 
         function renderPosts() {
-            const listContainer = document.getElementById('post-list');
-            const paginationContainer = document.getElementById('pagination-container');
-            listContainer.innerHTML = ''; 
-            paginationContainer.innerHTML = ''; 
+            const listContainer = document.getElementById('post-list'); const paginationContainer = document.getElementById('pagination-container');
+            listContainer.innerHTML = ''; paginationContainer.innerHTML = ''; 
 
-            let filteredPosts = allPostsData;
+            let filtered = allPostsData;
+            if (currentTier1 === '公開文章') filtered = filtered.filter(p => !p.isPremium);
+            else if (currentTier1 === '會員限定') filtered = filtered.filter(p => p.isPremium);
+            if (currentTier2 !== '全部') filtered = filtered.filter(p => p.category === currentTier2);
+            if (currentSearchQuery) filtered = filtered.filter(p => `${p.title||''} ${p.category||''} ${p.author||''} ${p.excerpt||''}`.toLowerCase().includes(currentSearchQuery));
 
-            // 📍 1. 執行第一層過濾 (閱讀權限)
-            if (currentTier1 === '公開文章') filteredPosts = filteredPosts.filter(post => !post.isPremium);
-            else if (currentTier1 === '會員限定') filteredPosts = filteredPosts.filter(post => post.isPremium);
+            if (filtered.length === 0) return listContainer.innerHTML = '<p class="system-msg">這個條件下目前還沒有文章喔！</p>';
 
-            // 📍 2. 執行第二層過濾 (主題分類)
-            if (currentTier2 !== '全部') filteredPosts = filteredPosts.filter(post => post.category === currentTier2);
-
-            // 📍 3. 執行第三層過濾 (🆕 搜尋關鍵字交集篩選)
-            if (currentSearchQuery) {
-                filteredPosts = filteredPosts.filter(post => {
-                    // 將該文章所有顯示的欄位組合成一個大字串，進行全面比對
-                    const searchableString = `
-                        ${post.title || ''} 
-                        ${post.category || ''} 
-                        ${post.author || ''} 
-                        ${post.excerpt || ''} 
-                        ${post.publishDate || ''}
-                    `.toLowerCase();
-                    return searchableString.includes(currentSearchQuery);
-                });
-            }
-
-            if (filteredPosts.length === 0) {
-                listContainer.innerHTML = '<p style="color: var(--slate-blue); text-align: center; padding: 20px;">這個條件下目前還沒有文章喔！</p>';
-                return;
-            }
-
-            const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-            const startIndex = (currentPage - 1) * postsPerPage;
-            const endIndex = startIndex + postsPerPage;
-            const postsToShow = filteredPosts.slice(startIndex, endIndex);
+            const totalPages = Math.ceil(filtered.length / postsPerPage);
+            const postsToShow = filtered.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage);
 
             postsToShow.forEach(post => {
-                const tag = post.isPremium ? '<span class="premium-tag">🔒 會員限定</span>' : '<span class="public-tag">📖 公開文章</span>';
-                let displayDate = post.publishDate ? new Date(post.publishDate).toLocaleDateString() : "未知日期";
-                const excerptText = post.excerpt ? post.excerpt : "點擊閱讀完整內容...";
-
-                const postHTML = `
+                const tag = post.isPremium ? '<span class="tag-badge tag-premium">會員限定</span>' : '<span class="tag-badge tag-public">公開文章</span>';
+                
+                listContainer.innerHTML += `
                     <div class="post-card">
-                        <div class="post-title-row">
-                            <h3 class="post-title">${post.title}</h3>
-                            <div>${tag}</div>
-                        </div>
+                        <div class="post-title-row"><h3 class="post-title">${post.title}</h3><div>${tag}</div></div>
                         <div class="post-meta">
-                            <span class="meta-cat">${post.category || '未分類'}</span>
-                            <span>✍️ ${post.author || '匿名'}</span>
-                            <span>🗓️ ${displayDate}</span>
+                            <span class="meta-cat">${post.category||'未分類'}</span>
+                            <span>作者：${post.author||'匿名'}</span>
+                            <span>日期：${post.publishDate}</span>
+                            <span>觀看：${post.viewCount}</span>
+                            <span>推薦：${post.likeCount}</span>
+                            <span>留言：${post.commentCount}</span>
                         </div>
-                        <div class="post-excerpt">${excerptText}</div>
-                        <button onclick="readPost('${post.id}')" style="width: 100%;">閱讀全文</button>
-                    </div>
-                `;
-                listContainer.innerHTML += postHTML;
+                        <div class="post-excerpt">${post.excerpt||'點擊閱讀完整內容...'}</div>
+                        <button onclick="readPost('${post.id}')" style="margin-bottom:0;">閱讀全文</button>
+                    </div>`;
             });
 
             if (totalPages > 1) {
-                renderPagination(totalPages, paginationContainer);
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button'); btn.className = `page-btn ${i === currentPage ? 'active' : ''}`; btn.innerText = i;
+                    btn.onclick = () => { currentPage = i; renderPosts(); document.getElementById('post-list-section').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+                    paginationContainer.appendChild(btn);
+                }
             }
         }
 
-        function renderPagination(totalPages, container) {
-            const paginationDiv = document.createElement('div');
-            paginationDiv.className = 'pagination';
-
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'page-btn';
-            prevBtn.innerText = '上一頁';
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.onclick = () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    renderPosts();
-                    scrollToList();
-                }
-            };
-            paginationDiv.appendChild(prevBtn);
-
-            for (let i = 1; i <= totalPages; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-                pageBtn.innerText = i;
-                pageBtn.onclick = () => {
-                    currentPage = i;
-                    renderPosts();
-                    scrollToList();
-                };
-                paginationDiv.appendChild(pageBtn);
-            }
-
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'page-btn';
-            nextBtn.innerText = '下一頁';
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.onclick = () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    renderPosts();
-                    scrollToList();
-                }
-            };
-            paginationDiv.appendChild(nextBtn);
-
-            container.appendChild(paginationDiv);
-        }
-
-        function scrollToList() {
-            const section = document.getElementById('post-list-section');
-            window.scrollTo({ top: section.offsetTop - 20, behavior: 'smooth' });
-        }
-
-// --- 讀取單篇文章與留言邏輯 ---
+        // --- 讀取單篇文章與互動邏輯 ---
         function readPost(id) {
-            currentPostId = id;
-            document.getElementById('search-section').style.display = 'none'; // 閱讀文章時隱藏搜尋框
+            currentPostId = id; 
+            document.getElementById('search-section').style.display = 'none'; 
             document.getElementById('post-list-section').style.display = 'none';
-            document.getElementById('post-detail').style.display = 'block';
+            document.getElementById('post-detail').style.display = 'block'; 
             document.getElementById('comment-section').style.display = 'none'; 
-            document.getElementById('detail-title').innerText = '載入中...';
-            document.getElementById('detail-content').innerText = '正在向系統驗證權限與提取內容...';
+            document.getElementById('interaction-container').innerHTML = '';
+            document.getElementById('detail-title').innerText = '載入中...'; 
+            document.getElementById('detail-content').innerHTML = '<p class="system-msg">正在驗證權限與提取內容...</p>';
             window.scrollTo(0, 0);
 
-            const url = `${API_URL}?action=getSinglePost&id=${id}&email=${encodeURIComponent(currentUser.email)}`;
+            let url = `${API_URL}?action=getSinglePost&id=${id}`;
+            if (currentUserEmail) url += `&email=${encodeURIComponent(currentUserEmail)}`;
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('detail-title').innerText = data.title;
-                    
-                    // 🌟 這裡補上：顯示分類、作者與發佈日期
-                    document.getElementById('detail-meta').innerHTML = `
-                        <span class="meta-cat">${data.category || '未分類'}</span>
-                        <span>✍️ ${data.author || '匿名'}</span>
-                        <span>🗓️ ${data.publishDate || '未知日期'}</span>
-                    `;
+            fetch(url).then(r => r.json()).then(data => {
+                document.getElementById('detail-title').innerText = data.title;
+                document.getElementById('detail-meta').innerHTML = `
+                    <span class="meta-cat">${data.category || '未分類'}</span>
+                    <span>作者：${data.author || '匿名'}</span>
+                    <span>日期：${data.publishDate || '未知日期'}</span>
+                    <span>觀看：${data.viewCount || 0}</span>
+                    <span>推薦：${data.likeCount || 0}</span>
+                    <span>留言：${data.commentCount || 0}</span>
+                `;
 
-                    if (data.error) {
-                        document.getElementById('detail-content').innerHTML = `
-                            <div style="background: #fffbe6; padding: 30px; border-radius: 12px; text-align: center; border: 1px solid var(--primary-yellow);">
-                                <h3 style="color: #d4a017; margin-top:0;">🔒 需要通行權限</h3>
-                                <p style="color: #8c6b0a; font-weight:bold;">${data.error}</p>
+                if (data.error && data.requiresLogin) {
+                    document.getElementById('detail-content').innerHTML = `<div class="lock-mask">${data.error}</div>`;
+                } else {
+                    document.getElementById('detail-content').innerHTML = data.content;
+
+                    // 渲染互動列與留言區
+                    if (data.requiresAuthForComments) {
+                        document.getElementById('interaction-container').innerHTML = `<div class="lock-mask">${data.error}</div>`;
+                    } else {
+                        // 互動列 (愛心)
+                        const likeClass = data.hasLiked ? "btn-interact active" : "btn-interact";
+                        const likeText = data.hasLiked ? `取消推薦 (${data.likeCount})` : `推薦文章 (${data.likeCount})`;
+                        document.getElementById('interaction-container').innerHTML = `
+                            <div class="interaction-bar">
+                                <button class="${likeClass}" id="btn-like" onclick="toggleLike(this)">${likeText}</button>
                             </div>
                         `;
-                    } else {
-                        document.getElementById('detail-content').innerHTML = data.content;
-                        document.getElementById('comment-section').style.display = 'block';
-                        renderComments(data.comments);
-                    }
-                });
-        }
 
-        function renderComments(comments) {
-            const list = document.getElementById('comments-list');
-            list.innerHTML = '';
-            if (!comments || comments.length === 0) {
-                list.innerHTML = '<p style="color: var(--slate-blue); font-size:0.9em;">目前還沒有人留言，來搶頭香吧！</p>';
-                return;
-            }
-            comments.forEach(c => {
-                list.innerHTML += `<div class="comment-item">${c}</div>`;
+                        // 渲染留言 (首 5 則收合邏輯)
+                        renderComments(data.comments);
+                        document.getElementById('comment-section').style.display = 'block';
+                    }
+                }
             });
         }
 
-        function submitComment() {
-            const commentText = document.getElementById('new-comment').value.trim();
-            if (!commentText) return alert('請輸入留言內容！'); 
+        function toggleLike(btn) {
+            if (!currentUserEmail) return alert("請先登入");
+            btn.innerText = "處理中..."; btn.disabled = true;
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'toggleLike', payload: { id: currentPostId, email: currentUserEmail } }) })
+            .then(() => readPost(currentPostId)); // 重新整理文章獲取最新數字
+        }
 
-            document.getElementById('btn-submit-comment').innerText = '傳送中...';
+        function renderComments(comments) {
+            const list = document.getElementById('comments-list'); list.innerHTML = '';
+            if (!comments || comments.length === 0) return list.innerHTML = '<p style="color: var(--slate-blue);">目前還沒有人留言，搶先發表看法吧！</p>';
+            
+            let visibleHtml = '';
+            let hiddenHtml = '';
+            let hiddenCount = 0;
 
-            fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({ 
-                    action: 'addComment', 
-                    payload: { id: currentPostId, comment: commentText } 
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('btn-submit-comment').innerText = '送出留言';
-                if (data.success) {
-                    document.getElementById('new-comment').value = '';
-                    readPost(currentPostId); 
-                } else {
-                    alert('留言失敗：' + data.error);
+            comments.forEach((c, index) => {
+                let repliesHtml = '';
+                if (c.replies && c.replies.length > 0) {
+                    c.replies.forEach(r => repliesHtml += `<div class="nested-reply-item">${r.replace(/\n/g, '<br>')}</div>`);
                 }
+                
+                const itemHtml = `
+                    <div class="comment-item">
+                        <div class="comment-text">${c.main.replace(/\n/g, '<br>')}</div>
+                        <div style="display:flex; gap:10px; margin-top:8px;">
+                            ${c.replies.length > 0 ? `<button class="btn-interact" style="padding:4px 8px; font-size:0.85rem;" onclick="toggleElement('replies-${currentPostId}-${c.colIndex}')">展開回覆 (${c.replies.length})</button>` : ''}
+                            <button class="btn-interact" style="padding:4px 8px; font-size:0.85rem;" onclick="toggleElement('reply-form-${currentPostId}-${c.colIndex}')">回覆此樓</button>
+                        </div>
+                        <div id="replies-${currentPostId}-${c.colIndex}" class="nested-replies" style="display:none;">${repliesHtml}</div>
+                        <div id="reply-form-${currentPostId}-${c.colIndex}" style="display:none; margin-top:10px;">
+                            <textarea id="content_${currentPostId}_${c.colIndex}" class="input-box" placeholder="回覆內容..." style="min-height:50px; margin-bottom:5px;"></textarea>
+                            <button onclick="submitComment('reply', ${c.colIndex}, this)" style="width:auto; padding:8px 16px;">送出回覆</button>
+                        </div>
+                    </div>`;
+
+                if (index < 5) {
+                    visibleHtml += itemHtml;
+                } else {
+                    hiddenHtml += itemHtml;
+                    hiddenCount += (1 + c.replies.length); // 計算被隱藏的總數量 (主留言+回覆)
+                }
+            });
+
+            list.innerHTML = visibleHtml;
+            if (hiddenHtml !== '') {
+                list.innerHTML += `
+                    <div id="hidden-comments-wrapper" style="display:none;">${hiddenHtml}</div>
+                    <button class="btn-interact" style="width:100%; justify-content:center; margin-top:10px;" onclick="toggleElement('hidden-comments-wrapper'); this.style.display='none';">
+                        載入更多留言 (隱藏 ${hiddenCount} 則紀錄)
+                    </button>
+                `;
+            }
+        }
+
+        function submitComment(type, colIndex, btn) {
+            if (!currentUserEmail) return alert("請先登入");
+            
+            let content = "";
+            if (type === 'main') {
+                content = document.getElementById(`new-comment`).value.trim();
+            } else {
+                content = document.getElementById(`content_${currentPostId}_${colIndex}`).value.trim();
+            }
+            
+            if (!content) return alert("請輸入內容");
+
+            const originalText = btn.innerText; btn.innerText = '傳送中...'; btn.disabled = true;
+
+            fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: 'addComment', payload: { id: currentPostId, email: currentUserEmail, content, colIndex } }) })
+            .then(res => res.json()).then(data => {
+                btn.innerText = originalText; btn.disabled = false;
+                if (data.success) {
+                    if(type === 'main') document.getElementById('new-comment').value = '';
+                    showMsg('comment-msg', '發表成功！');
+                    readPost(currentPostId); 
+                } else alert('發生錯誤');
             });
         }
 
         function backToList() {
             document.getElementById('post-detail').style.display = 'none';
-            document.getElementById('search-section').style.display = 'block'; // 返回列表時恢復顯示搜尋框
+            document.getElementById('search-section').style.display = 'block'; 
             document.getElementById('post-list-section').style.display = 'block';
             currentPostId = null;
-            scrollToList();
+            fetchPosts(); // 更新列表上的數據
+            document.getElementById('search-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     </script>
 </body>
