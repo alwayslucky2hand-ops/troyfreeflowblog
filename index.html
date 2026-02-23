@@ -6,65 +6,83 @@
     <title>特洛伊AI賦能基地</title>
     <style>
         :root {
-            --primary-yellow: #E1B12C; --primary-hover: #C89D26;      
-            --slate-blue: #708090; --accent-green: #619A86;        
-            --danger-color: #e17055; --bg-color: #FFFFFF;            
-            --text-main: #333333; --text-muted: #64748b; --glass-border: #cbd5e1;        
+            /* 🌟 色彩計畫更新：亮白底色 + 橘色點綴 + 深灰鐵灰框架 */
+            --primary-yellow: #F59E0B; /* 活力橘/琥珀色 (主要按鈕與強調) */
+            --primary-hover: #D97706;  /* 深橘色 (懸停狀態) */     
+            --slate-blue: #1F2937;     /* 鐵灰色 (用於標題、按鈕外框、Hover狀態) */ 
+            --accent-green: #10B981;   /* 翡翠綠 (用於標籤) */        
+            --bg-pure: #FFFFFF;        /* 亮白底色 (網頁整體背景) */          
+            --panel-bg: #FFFFFF;       /* 區塊背景 */
+            --input-bg: #F8FAFC;       /* 極淺灰 (輸入框與留言底色) */
+            --text-dark: #111827;      /* 深黑灰 (主要閱讀文字) */          
+            --text-muted: #6B7280;     /* 灰階 (說明文字) */ 
+            --glass-border: #CBD5E1;   /* 淺灰邊框色 (區塊外框) */        
+            --radius-soft: 12px; 
+            --danger-color: #EF4444;   /* 警告紅 */
         }
+        
         *, *::before, *::after { box-sizing: border-box; }
-        body { font-family: 'Microsoft JhengHei', sans-serif; line-height: 1.8; max-width: 800px; margin: 0 auto; padding: 40px 20px; background: var(--bg-color); color: var(--text-main); min-height: 100vh; }
+        
+        body { font-family: 'Microsoft JhengHei', sans-serif; line-height: 1.8; max-width: 800px; margin: 0 auto; padding: 40px 20px; background: var(--bg-pure); color: var(--text-dark); min-height: 100vh; }
         h1, h2, h3 { color: var(--slate-blue); letter-spacing: 0.05em; font-weight: bold; margin-bottom: 24px; }
         
-        .section { background: #ffffff; padding: 40px; margin-bottom: 40px; border-radius: 12px; border: 1px solid var(--glass-border); }
+        /* 區塊面板 */
+        .section { background: var(--panel-bg); padding: 40px; margin-bottom: 40px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
         
-        .input-box, textarea { padding: 14px 18px; border: 1px solid var(--glass-border); border-radius: 12px; font-size: 1rem; font-family: inherit; transition: all 0.3s ease; width: 100%; margin-bottom: 10px; background: #f8fafc; }
-        .input-box:focus, textarea:focus { outline: none; border-color: var(--primary-yellow); background: #ffffff; box-shadow: 0 0 0 3px rgba(225, 177, 44, 0.2); }
+        /* 輸入框樣式 */
+        .input-box, textarea { padding: 14px 18px; border: 1px solid var(--glass-border); border-radius: 8px; font-size: 1rem; font-family: inherit; transition: all 0.3s ease; width: 100%; margin-bottom: 10px; background: var(--input-bg); color: var(--text-dark); }
+        .input-box:focus, textarea:focus { outline: none; border-color: var(--primary-yellow); background: var(--bg-pure); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2); }
         
-        button { background: var(--primary-yellow); color: #ffffff; border: none; padding: 14px 28px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.2s; width: 100%; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        button:hover { background: var(--primary-hover); }
-        button:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
+        /* 主要按鈕 (取消了 transform 跳動) */
+        button { background: var(--primary-yellow); color: #ffffff; border: none; padding: 14px 28px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: background 0.2s; width: 100%; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        button:hover { background: var(--primary-hover); } 
+        button:disabled { background: #E5E7EB; color: var(--text-muted); cursor: not-allowed; box-shadow: none; }
         
         .inline-msg { font-size: 0.9em; font-weight: bold; display: block; margin-top: 5px; min-height: 24px; transition: opacity 0.3s; }
         .msg-error { color: var(--danger-color); }
         .msg-success { color: var(--accent-green); }
 
-        .filter-section { margin-bottom: 35px; padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border); }
+        /* 篩選區塊 */
+        .filter-section { background: var(--panel-bg); margin-bottom: 35px; padding: 24px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
         .filter-title { margin-bottom: 12px; font-weight: bold; color: var(--slate-blue); font-size: 0.9em; letter-spacing: 0.05em; }
-        .category-nav { display: flex; gap: 12px; flex-wrap: nowrap; overflow-x: auto; margin-bottom: 20px;}
-        .cat-btn { background: #f8fafc; color: var(--slate-blue); padding: 8px 20px; border-radius: 30px; border: 1px solid var(--glass-border); font-size: 0.95em; cursor: pointer; width: auto; margin-bottom:0; box-shadow: none; white-space: nowrap;}
-        .cat-btn.active { background: var(--slate-blue); color: #ffffff; border-color: var(--slate-blue); }
+        .category-nav { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: nowrap; overflow-x: auto; }
+        .cat-btn { background: var(--input-bg); color: var(--text-muted); padding: 8px 18px; border-radius: 30px; border: 1px solid var(--glass-border); font-size: 0.95em; font-weight: bold; cursor: pointer; transition: all 0.2s; white-space: nowrap; margin-bottom: 0; box-shadow: none; width: auto; }
+        .cat-btn.active, .cat-btn:hover { background: var(--primary-yellow); color: #ffffff; border-color: var(--primary-yellow); }
 
-        .post-card { background: #fff; border: 1px solid var(--glass-border); padding: 35px; margin-bottom: 25px; border-radius: 12px; }
+        /* 文章卡片 */
+        .post-card { background: var(--panel-bg); border: 1px solid var(--glass-border); padding: 35px; margin-bottom: 25px; border-radius: var(--radius-soft); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
         .post-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-        .post-title { font-size: 1.5em; margin: 0; color: #2d3436; font-weight: bold; }
+        .post-title { font-size: 1.5em; margin: 0; color: var(--text-dark); font-weight: bold; }
         .tag-badge { padding: 4px 12px; border-radius: 6px; font-size: 0.85em; font-weight: bold; color: white; display: inline-block; white-space: nowrap; }
         .tag-premium { background: var(--primary-yellow); }
         .tag-public { background: var(--accent-green); }
         
-        .post-meta { font-size: 0.9em; color: var(--slate-blue); margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; }
-        .meta-cat { background: #f1f5f9; padding: 4px 12px; border-radius: 6px; border: 1px solid var(--glass-border); }
-        .post-excerpt { color: #636e72; margin-bottom: 25px; }
+        .post-meta { font-size: 0.9em; color: var(--text-muted); margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .meta-cat { background: var(--input-bg); color: var(--slate-blue); border: 1px solid var(--glass-border); padding: 4px 12px; border-radius: 6px; font-weight: bold; }
+        .post-excerpt { color: var(--text-dark); margin-bottom: 25px; }
 
         #post-detail { display: none; }
         
-        /* 互動與留言區 */
+        /* 互動與留言區 (採用鐵灰色與橘色結合，無跳動) */
         .interaction-bar { display: flex; gap: 10px; margin-top: 20px; border-top: 1px dashed var(--glass-border); padding-top: 20px; flex-wrap: wrap; }
-        .btn-interact { background: #f8fafc; color: var(--slate-blue); border: 1px solid var(--glass-border); width: auto; padding: 8px 16px; font-size: 0.95rem; box-shadow: none; margin-bottom: 0; transition: all 0.2s; }
-        .btn-interact.active { background: var(--accent-green); color: #ffffff; border-color: var(--accent-green); }
+        .btn-interact { background: transparent; color: var(--slate-blue); border: 1px solid var(--slate-blue); width: auto; padding: 8px 16px; font-size: 0.95rem; box-shadow: none; margin-bottom: 0; transition: all 0.2s; }
+        .btn-interact:hover { background: var(--slate-blue); color: #ffffff; border-color: var(--slate-blue); }
+        .btn-interact.active { background: var(--primary-yellow); color: #ffffff; border-color: var(--primary-yellow); }
+        .btn-interact.active:hover { background: var(--primary-hover); color: #ffffff; border-color: var(--primary-hover); }
         
-        .comments-wrapper { margin-top: 20px; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid var(--glass-border); }
-        .comment-item { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid var(--accent-green); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .comments-wrapper { margin-top: 20px; background: var(--input-bg); padding: 20px; border-radius: var(--radius-soft); border: 1px solid var(--glass-border); }
+        .comment-item { background: var(--panel-bg); padding: 16px; border-radius: 8px; margin-bottom: 16px; border-left: 4px solid var(--primary-yellow); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .comment-text { font-size: 1rem; color: var(--text-dark); white-space: pre-wrap; word-break: break-word; }
         
         .nested-replies { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--glass-border); padding-left: 10px; }
-        .nested-reply-item { margin-bottom: 10px; font-size: 0.95rem; color: #475569; padding-left: 15px; border-left: 2px solid var(--glass-border); white-space: pre-wrap; }
+        .nested-reply-item { margin-bottom: 10px; font-size: 0.95rem; color: var(--text-dark); padding-left: 15px; border-left: 2px solid var(--glass-border); white-space: pre-wrap; }
 
         .system-msg { text-align: center; color: var(--slate-blue); padding: 40px 20px; font-size: 1.1rem; font-weight: bold; }
         .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 30px; flex-wrap: wrap; }
-        .page-btn { background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 6px; cursor: pointer; width: auto; margin-bottom: 0; box-shadow: none; }
-        .page-btn.active { background: var(--slate-blue); color: #ffffff; }
+        .page-btn { background: var(--panel-bg); color: var(--slate-blue); border: 1px solid var(--glass-border); padding: 8px 16px; border-radius: 6px; cursor: pointer; width: auto; margin-bottom: 0; box-shadow: none; }
+        .page-btn.active { background: var(--primary-yellow); color: #ffffff; border-color: var(--primary-yellow); }
 
-        .lock-mask { background: #fffbe6; padding: 20px; text-align: center; border-radius: 8px; color: #8c6b0a; border: 1px solid var(--primary-yellow); margin-top: 15px; font-weight: bold; }
+        .lock-mask { background: var(--input-bg); padding: 20px; text-align: center; border-radius: 8px; color: var(--slate-blue); border: 1px dashed var(--glass-border); margin-top: 15px; font-weight: bold; }
 
         @media (max-width: 600px) { 
             body { padding: 20px 15px; } 
@@ -86,7 +104,7 @@
             歡迎來到基地！<br>
             公開文章可自由瀏覽與匿名互動。若要閱讀「會員限定」文章，請輸入信箱驗證。登入後的所有留言與愛心推薦，將自動綁定您的信箱紀錄。
         </p>
-        <p id="login-status" style="color: var(--slate-blue); font-weight: bold; margin-bottom: 15px;">目前狀態：未登入 (訪客)</p>
+        <p id="login-status" style="color: var(--primary-yellow); font-weight: bold; margin-bottom: 15px;">目前狀態：未登入 (訪客)</p>
         
         <div id="step-1" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
             <input type="email" id="email" class="input-box" placeholder="輸入會員 Email" style="flex: 2; max-width: 300px; margin-bottom: 0;">
@@ -98,7 +116,7 @@
             <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start;">
                 <input type="text" id="otp-code" class="input-box" placeholder="輸入 6 位數驗證碼" style="flex: 2; max-width: 300px; margin-bottom: 0;">
                 <button onclick="verifyLogin()" id="btn-login" style="flex: 1; margin-bottom: 0; width: auto; min-width: 120px;">登入通行</button>
-                <button onclick="cancelLogin()" style="flex: 1; margin-bottom: 0; width: auto; min-width: 80px; background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border);">返回</button>
+                <button onclick="cancelLogin()" style="flex: 1; margin-bottom: 0; width: auto; min-width: 80px; background: var(--input-bg); color: var(--slate-blue); border: 1px solid var(--glass-border);">返回</button>
             </div>
             <span id="login-msg" class="inline-msg" style="width: 100%;"></span>
         </div>
@@ -125,7 +143,7 @@
     </div>
 
     <div class="section" id="post-detail">
-        <button onclick="backToList()" style="background: #ffffff; color: var(--slate-blue); border: 1px solid var(--glass-border); width: auto; box-shadow: none;">返回文章列表</button>
+        <button onclick="backToList()" style="background: var(--input-bg); color: var(--slate-blue); border: 1px solid var(--glass-border); width: auto; box-shadow: none;">返回文章列表</button>
         <div class="post-meta" id="detail-meta" style="margin-top: 25px;"></div>
         <h2 id="detail-title" style="margin-top: 5px; font-size: 2em;">載入中...</h2>
         <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 30px 0;">
@@ -381,7 +399,7 @@
 
         function renderComments(comments) {
             const list = document.getElementById('comments-list'); list.innerHTML = '';
-            if (!comments || comments.length === 0) return list.innerHTML = '<p style="color: var(--slate-blue);">目前還沒有人留言，搶先發表看法吧！</p>';
+            if (!comments || comments.length === 0) return list.innerHTML = '<p style="color: var(--text-muted);">目前還沒有人留言，搶先發表看法吧！</p>';
             
             let visibleHtml = '';
             let hiddenHtml = '';
